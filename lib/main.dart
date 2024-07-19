@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async{
-  await dotenv.load();
   runApp(const MyApp());
 }
 
@@ -12,7 +11,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final key = dotenv.get("GEMINI_API_KEY");
     return MaterialApp(
       home : Scaffold(
         appBar: AppBar(
