@@ -1,10 +1,24 @@
 //import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'dto/user.dart';
+import 'dto/recipe.dart';
 
-void main() {
-  runApp(const MyApp());
+//await Hive.init();
+
+void main() async{
+  //runApp(const MyApp());
+  await Hive.initFlutter();
+  Hive.registerAdapter(UserAdapter());
+  Hive.registerAdapter(RecipeAdapter());
+
+  await Hive.openBox<User>('users');
+  await Hive.openBox<Recipe>('recipes');
+
+  runApp(MyApp());
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
