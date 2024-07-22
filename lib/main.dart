@@ -1,9 +1,11 @@
 //import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:pj_rmeal/src/webCrawling/crawling.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(CrawlSample());
+  //runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
