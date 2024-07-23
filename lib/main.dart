@@ -1,49 +1,45 @@
-//import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'dto/user.dart';
-import 'dto/recipe.dart';
+import 'data_page.dart';
+import 'user_page.dart'; // Import UserPage
+import 'dto/recipe.dart'; // Import Recipe model
+import 'dto/user.dart'; // Import User model
+import 'dto/data_control.dart'; // Import DataControl
 
-//await Hive.init();
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-void main() async{
-  //runApp(const MyApp());
   await Hive.initFlutter();
-  Hive.registerAdapter(UserAdapter());
+
+  // Register adapters
   Hive.registerAdapter(RecipeAdapter());
+  Hive.registerAdapter(UserAdapter());
 
-  await Hive.openBox<User>('users');
+  // Open boxes
   await Hive.openBox<Recipe>('recipes');
+  await Hive.openBox<User>('users');
 
-  runApp(MyApp());
+  // Initialize DataControl
+  final dataControl = DataControl();
+  await dataControl.init();
+
+  runApp(MyApp(dataControl: dataControl));
 }
 
-
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final DataControl dataControl;
+
+  const MyApp({Key? key, required this.dataControl}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home : Scaffold(
-        appBar: AppBar(
-          title: Text('AItest'),
-        ),
-        body: Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Column(
-            children: <Widget>[
-              TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'chat',
-                ),
-              )
-            ],
-          ),
-        ),
-      )
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(colorSchemeSeed: Colors.green),
+      home: DataPage(dataControl: dataControl),
+      routes: {
+        '/userPage': (context) => UserPage(dataControl: dataControl),
+      },
     );
   }
 }

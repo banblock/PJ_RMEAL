@@ -26,6 +26,21 @@ class Recipe extends HiveObject {
     required this.ingredients,
     required this.image,
   });
+  
+  //json으로 만드는 코드인데, hive는 알아서 저장해서 딱히 필요는 없음
+  factory Recipe.fromJson(Map<String, dynamic> json) => Recipe(
+    id: json['id'],
+    title: json['title'],
+    instruction: json['instruction'],
+    ingredients: List<String>.from(json['ingredients']),
+    image: json['image'],
+  );
 
-
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'title': title,
+    'instruction': instruction,
+    'ingredients': ingredients,
+    'image': image,
+  };
 }
