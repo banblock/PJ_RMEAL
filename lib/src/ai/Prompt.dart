@@ -1,9 +1,8 @@
 import 'package:google_generative_ai/google_generative_ai.dart';
 class Prompt{
-  String prompt ='';
-  Content inputPrompt(){
-    Content content = Content.text(prompt);
-    return content;
+  var prompt ='';
+  String inputPrompt(){
+    return prompt;
   }
 
 }
@@ -13,7 +12,7 @@ class ChatPrompt extends Prompt{
     prompt = "jason형식으로 요리title, ingrediant, summary이 정리된 data 들을 입력받는다.\n사용자 입력을 받는다.\n사용자 입력을 바탕으로 data를 선정하여 title을 배열로 출력한다.\n복수의 data가 적합한 경우 해당하는 data를 모두 출력한다.\ndata:";
   }
 
-  void addRecipeData(String data){
+  void addRecipeData(List<Map> data){
     prompt = "$prompt\n$data";
   }
   void addUserComment(String comment){
