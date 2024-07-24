@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'data_page.dart';
 import 'user_page.dart'; // Import UserPage
-import 'dto/recipe.dart'; // Import Recipe model
-import 'dto/user.dart'; // Import User model
-import 'dto/data_control.dart'; // Import DataControl
+import 'src/dto/recipe.dart'; // Import Recipe model
+import 'src/dto/user.dart'; // Import User model
+import 'src/dto/data_control.dart'; // Import DataControl
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
