@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pj_rmeal/src/webCrawling/crawling.dart';
 
 void main() {
-  runApp(CrawlSample());
-  //runApp(const MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
