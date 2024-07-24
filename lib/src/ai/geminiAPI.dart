@@ -58,8 +58,8 @@ class GeminiAI {
     final model = GenerativeModel(model: 'gemini-1.5-flash', apiKey: key);
     String text = chatprompt!.inputPrompt();
     final content = [Content.text(text)];
-    final response = model.generateContent(content);
-
+    final response = await model.generateContent(content);
+    print(response.text);
   }
 
   void SummarizeRecipeModel(final key) async{
