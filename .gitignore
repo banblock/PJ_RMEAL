@@ -41,8 +41,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-
-# env
 *.env
 .env*
-
+macos/Flutter/ephemeral/Flutter-Generated.xcconfig
+macos/Flutter/ephemeral/flutter_export_environment.sh

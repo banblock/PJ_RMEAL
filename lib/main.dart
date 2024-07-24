@@ -1,29 +1,9 @@
+//import 'dart:ffi';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'data_page.dart';
-import 'user_page.dart'; // Import UserPage
-import 'src/dto/recipe.dart'; // Import Recipe model
-import 'src/dto/user.dart'; // Import User model
-import 'src/dto/data_control.dart'; // Import DataControl
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  await Hive.initFlutter();
-
-  // Register adapters
-  Hive.registerAdapter(RecipeAdapter());
-  Hive.registerAdapter(UserAdapter());
-
-  // Open boxes
-  await Hive.openBox<Recipe>('recipes');
-  await Hive.openBox<User>('users');
-
-  // Initialize DataControl
-  final dataControl = DataControl();
-  await dataControl.init();
-
-  runApp(MyApp(dataControl: dataControl));
+void main() async{
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
