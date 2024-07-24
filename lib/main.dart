@@ -7,29 +7,19 @@ void main() async{
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final DataControl dataControl;
+
+  const MyApp({Key? key, required this.dataControl}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home : Scaffold(
-        appBar: AppBar(
-          title: Text('AItest'),
-        ),
-        body: Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Column(
-            children: <Widget>[
-              TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'chat',
-                ),
-              )
-            ],
-          ),
-        ),
-      )
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(colorSchemeSeed: Colors.green),
+      home: DataPage(dataControl: dataControl),
+      routes: {
+        '/userPage': (context) => UserPage(dataControl: dataControl),
+      },
     );
   }
 }
