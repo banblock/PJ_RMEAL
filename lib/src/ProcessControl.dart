@@ -7,4 +7,33 @@ class ProcessController{
   CrawlRecipePageService crawling_processer = CrawlRecipePageService();
   
 
+
+  void responeAIcomment(){
+
+  }
+  void summarizeRecipe(){
+
+  }
+
+
+
+  void getRecipeData(){
+
+  }
+  void addRecipeData(){
+
+  }
+  void modifyData(){
+
+  }
+
+
+
+  void crawlingRecipeData(){
+
+  }
+  void RecipeUpdate(){
+
+  }
+
 }
