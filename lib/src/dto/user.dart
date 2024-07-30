@@ -18,6 +18,15 @@ class User extends HiveObject {
     required this.excludedIngredients, 
     required this.healthCondition,
   });
+  //유효성 검사부분은 그냥 입력 페이지에서 제한하도록 했음 (성능 이슈)
+  // {
+  // if (userId.length > 20) {
+  // throw ArgumentError('User ID cannot be more than 20 characters');
+  // }
+  // if (healthCondition.length > 100) {
+  // throw ArgumentError('Health Condition cannot be more than 100 characters');
+  // }
+  // }
 
   // json으로 변환하는 부분
   factory User.fromJson(Map<String, dynamic> json) => User(

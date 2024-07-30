@@ -1,11 +1,12 @@
+// 'dart:nativewrappers/_internal/vm/lib/internal_patch.dart';
+
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 import 'dart:io';
 import 'dart:convert';
-//원래 backup하는 부분인데 toJson은 데이터 모델에서 그냥 쓰기로 했음
-import 'user.dart';
-import 'recipe.dart';
+import 'package:pj_rmeal/src/dto/user.dart';
+import 'package:pj_rmeal/src/dto/recipe.dart';
 
 class DataControl {
   late Box<User> userBox;
@@ -17,82 +18,97 @@ class DataControl {
       final directory = await getApplicationDocumentsDirectory();
       Hive.init(directory.path);
 
-      // main에서 호출하기
-      // Hive.registerAdapter(UserAdapter());
-      // Hive.registerAdapter(RecipeAdapter());
+      //Hive.registerAdapter(UserAdapter());
+      //Hive.registerAdapter(RecipeAdapter());
 
       userBox = await Hive.openBox<User>('users');
       recipeBox = await Hive.openBox<Recipe>('recipes');
+
+      // 없으면 user세팅 기본값으로
+      //await _clearAllUsers();
+      if (userBox.isEmpty) {
+        await _initializeDefaultUser();
+      }
     } catch (e) {
       print("Error initializing Hive: $e");
-      // 상위 코드 에서 실행시 예외 처리 넘기기
       rethrow;
     }
   }
 
-  Future<void> addUser({
-    required List<String> excludedIngredients,
-    required String healthCondition,
-  }) async {
+  Future<void> _clearAllUsers() async {
     try {
-      final user = User(
-        userId: uuid.v4(), // UUID 생성
-        excludedIngredients: excludedIngredients,
-        healthCondition: healthCondition,
-      );
-      await userBox.add(user);
+      await userBox.clear();
+      print('All users cleared');
     } catch (e) {
-      print("Error adding user: $e");
+      print("Error clearing all users: $e");
       rethrow;
     }
   }
 
-  Future<void> updateUser(int index, User user) async {
+  Future<void> _initializeDefaultUser() async {
+    final defaultUser = User(
+      userId: uuid.v4(),
+      excludedIngredients: [],
+      healthCondition: '',
+    );
+    await userBox.put('default', defaultUser);
+    print('default add');
+  }
+
+  User? getUser() {
     try {
-      // 인덱스 체크하는 부분, 안맞으면 에러 발생
-      if (index < 0 || index >= userBox.length) {
-        throw RangeError('Index out of range: $index');
-      }
-      await userBox.putAt(index, user);
+      return userBox.get('default');
+    } catch (e) {
+      print("Error retrieving user: $e");
+      return null;
+    }
+  }
+
+  Future<void> updateUser(User user) async {
+    try {
+      await userBox.put('default', user);
     } catch (e) {
       print("Error updating user: $e");
       rethrow;
     }
   }
 
-  Future<void> deleteUser(int index) async {
+  Future<void> deleteUser() async {
     try {
-      //인덱스 체크
-      if (index < 0 || index >= userBox.length) {
-        throw RangeError('Index out of range: $index');
-      }
-      await userBox.deleteAt(index);
+      await userBox.delete('default');
     } catch (e) {
       print("Error deleting user: $e");
-      // 위로 넘기기
       rethrow;
     }
   }
 
-  List<User> getAllUsers() {
-    try {
-      return userBox.values.toList();
-    } catch (e) {
-      print("Error retrieving users: $e");
-      // 에러나면 빈 걸로
-      return [];
-    }
-  }
+  // user 처리함수들 싱글톤으로 바꾸며 추가 삭제 코드는 없앰
+  // Future<void> addUser({ ... });
+  // Future<void> updateUser(int index, User user) { ... }
+  // Future<void> deleteUser(int index) { ... }
+  // List<User> getAllUsers() { ... }
 
+  // Recipe management methods (unchanged)
   Future<void> addRecipe({
+    String? id,
     required String title,
     required String instruction,
     required List<String> ingredients,
     required String image,
   }) async {
     try {
+      final recipeId = id ?? uuid.v4();
+
+      if (title.isEmpty || instruction.isEmpty || ingredients.isEmpty) {
+        throw Exception('some attribute cannot be empty');
+      }
+
+      if (recipeBox.values.any((recipe) => recipe.id == recipeId)) {
+        throw Exception('Recipe: id $recipeId already exists');
+      }
+
       final recipe = Recipe(
-        id: uuid.v4(), // UUID 생성
+        id: recipeId,
         title: title,
         instruction: instruction,
         ingredients: ingredients,
@@ -101,35 +117,30 @@ class DataControl {
       await recipeBox.add(recipe);
     } catch (e) {
       print("Error adding recipe: $e");
-      // 위로 넘기기
       rethrow;
     }
   }
 
   Future<void> updateRecipe(int index, Recipe recipe) async {
     try {
-      // 인덱스 체크
       if (index < 0 || index >= recipeBox.length) {
         throw RangeError('Index out of range: $index');
       }
       await recipeBox.putAt(index, recipe);
     } catch (e) {
       print("Error updating recipe: $e");
-      // 위로 넘기기
       rethrow;
     }
   }
 
   Future<void> deleteRecipe(int index) async {
     try {
-      // 인덱스 확인
       if (index < 0 || index >= recipeBox.length) {
         throw RangeError('Index out of range: $index');
       }
       await recipeBox.deleteAt(index);
     } catch (e) {
       print("Error deleting recipe: $e");
-      // 위로 넘기기
       rethrow;
     }
   }
@@ -139,8 +150,25 @@ class DataControl {
       return recipeBox.values.toList();
     } catch (e) {
       print("Error retrieving recipes: $e");
-      // 여기도 에러나면 빈 리스트로 반환
       return [];
+    }
+  }
+
+  Recipe? getRecipeById(String id) {
+    try {
+      return recipeBox.values.firstWhere((recipe) => recipe.id == id);
+    } catch (e) {
+      print("Error retrieving recipe by id: $e");
+      throw Exception("Recipe not found with id: $id");
+    }
+  }
+
+  bool isRecipeIdDuplicate(String id) {
+    try {
+      return recipeBox.values.any((recipe) => recipe.id == id);
+    } catch (e) {
+      print("Error checking recipe id duplicate: $e");
+      return false;
     }
   }
 }
