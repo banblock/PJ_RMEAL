@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:pj_rmeal/src/ai/geminiAPI.dart';
 import 'package:pj_rmeal/src/ui/component/RecipeList.dart';
+import 'package:pj_rmeal/src/ui/body/MainBody.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();  // 1번코드
@@ -39,14 +40,7 @@ class MyHomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Text Input Example'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Expanded(child: RecipeList())
-          ],
-        ),
-      ),
+      body: MainBody()
     );
   }
 }
