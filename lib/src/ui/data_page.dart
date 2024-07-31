@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:pj_rmeal/src/dto/recipe.dart';
-import 'package:pj_rmeal/src/dto/data_control.dart';
+import 'package:pj_rmeal/src/dto/recipes.dart';
+import 'package:pj_rmeal/src/dto/dataControl.dart';
 import 'package:pj_rmeal/src/ui/body/RecipePage.dart'; // RecipePage 임포트
 import 'package:uuid/uuid.dart';
 
@@ -15,8 +16,8 @@ class DataPage extends StatefulWidget {
 }
 
 class _DataPageState extends State<DataPage> {
-  late Box<Recipe> recipeBox;
-  List<Recipe> recipes = [];
+  late Box<Recipes> recipesBox;
+  List<Recipes> recipes = [];
 
   final idController = TextEditingController();
   final titleController = TextEditingController();
@@ -33,7 +34,7 @@ class _DataPageState extends State<DataPage> {
 
   Future<void> _initializeBox() async {
     try {
-      recipeBox = await Hive.openBox<Recipe>('recipes'); // Box 열기
+      recipesBox = await Hive.openBox<Recipes>('recipes'); // Box 열기
       _loadRecipes(); // 데이터 로드
     } catch (e) {
       print('Error opening box: $e'); // 오류 메시지 출력
@@ -42,7 +43,7 @@ class _DataPageState extends State<DataPage> {
 
   void _loadRecipes() {
     setState(() {
-      recipes = recipeBox.values.toList();
+      recipes = recipesBox.values.toList();
     });
   }
 
@@ -61,18 +62,14 @@ class _DataPageState extends State<DataPage> {
         throw Exception('Recipe with id $recipeId already exists');
       }
 
-      final recipe = Recipe(
+      final recipe = Recipes(
         id: recipeId,
-        title: titleController.text,
-        instruction: instructionController.text,
-        ingredients: ingredientsController.text.split(','),
-        image: imageController.text,
       );
 
       if (editingIndex == null) {
-        await recipeBox.add(recipe);
+        await recipesBox.add(recipe);
       } else {
-        await recipeBox.putAt(editingIndex!, recipe);
+        await recipesBox.putAt(editingIndex!, recipe);
       }
 
       _loadRecipes();
@@ -102,15 +99,11 @@ class _DataPageState extends State<DataPage> {
   void _editRecipe(int index) {
     final recipe = recipes[index];
     idController.text = recipe.id;
-    titleController.text = recipe.title;
-    instructionController.text = recipe.instruction;
-    ingredientsController.text = recipe.ingredients.join(',');
-    imageController.text = recipe.image;
     editingIndex = index;
   }
 
   void _deleteRecipe(int index) async {
-    await recipeBox.deleteAt(index);
+    await recipesBox.deleteAt(index);
     _loadRecipes();
   }
 
@@ -127,7 +120,7 @@ class _DataPageState extends State<DataPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => RecipePage(recipeBox: recipeBox),
+        builder: (context) => RecipePage(recipesBox: recipesBox),
       ),
     );
   }
@@ -205,14 +198,11 @@ class _DataPageState extends State<DataPage> {
               itemBuilder: (context, index) {
                 final recipe = recipes[index];
                 return ListTile(
-                  title: Text(recipe.title),
+                  title: Text('csv not exist'),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('ID: ${recipe.id}'),
-                      Text('Instruction: ${recipe.instruction}'),
-                      Text('Ingredients: ${recipe.ingredients.join(', ')}'),
-                      Text('Image URL: ${recipe.image}'),
                     ],
                   ),
                   trailing: Row(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pj_rmeal/src/dto/user.dart';
-import 'package:pj_rmeal/src/dto/data_control.dart';
+import 'package:pj_rmeal/src/dto/dataControl.dart';
 
 class UserPage extends StatefulWidget {
   final DataControl dataControl;

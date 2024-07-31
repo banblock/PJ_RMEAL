@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:pj_rmeal/src/dto/recipe.dart';
+//import 'package:pj_rmeal/src/dto/recipe.dart';
+import 'package:pj_rmeal/src/dto/recipes.dart';
 
 class RecipeDetailPage extends StatelessWidget {
-  final Recipe recipe;
+  final Recipes recipe;
 
   const RecipeDetailPage({Key? key, required this.recipe}) : super(key: key);
 
@@ -24,28 +25,28 @@ class RecipeDetailPage extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 8),
-            Text(
-              'Title: ${recipe.title}',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Instruction: ${recipe.instruction}',
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Ingredients: ${recipe.ingredients.join(', ')}',
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Image URL: ${recipe.image}',
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
+            // const SizedBox(height: 8),
+            // Text(
+            //   'Title: ${recipe.title}',
+            //   style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            //     fontWeight: FontWeight.bold,
+            //   ),
+            // ),
+            // const SizedBox(height: 8),
+            // Text(
+            //   'Instruction: ${recipe.instruction}',
+            //   style: Theme.of(context).textTheme.bodyMedium,
+            // ),
+            // const SizedBox(height: 8),
+            // Text(
+            //   'Ingredients: ${recipe.ingredients.join(', ')}',
+            //   style: Theme.of(context).textTheme.bodyMedium,
+            // ),
+            // const SizedBox(height: 8),
+            // Text(
+            //   'Image URL: ${recipe.image}',
+            //   style: Theme.of(context).textTheme.bodyMedium,
+            // ),
           ],
         ),
       ),
