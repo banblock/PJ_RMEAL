@@ -19,6 +19,9 @@ class SerchState extends State<SerchBody>{
         children: [
           Expanded(child: RecipeList()),
           Container(
+            alignment: Alignment.center,
+            width: 800,
+            height: 50,
             decoration: BoxDecoration(
               border: Border.all(
                 color: Colors.deepOrange, // 테두리 색상
