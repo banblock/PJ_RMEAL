@@ -62,9 +62,6 @@ class GeminiAI {
     print(response.text);
   }
 
-  void SummarizeRecipeModel(final key) async{
-    final model = GenerativeModel(model: 'gemini-1.5-flash', apiKey: key);
-  }
 
   void callChatMessage(String text){
     chatprompt?.addUserComment(text);
