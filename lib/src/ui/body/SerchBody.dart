@@ -9,6 +9,7 @@ class SerchBody extends StatefulWidget{
 }
 
 class SerchState extends State<SerchBody>{
+  SearchContainer search_container = SearchContainer();
   final recipelist = RecipeList();
   TextEditingController controller = TextEditingController();
   @override
@@ -17,9 +18,10 @@ class SerchState extends State<SerchBody>{
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Expanded(child:SizedBox(width: 800, height: 1000,child:recipelist)),
-          SearchContainer()
+          Expanded(child:SizedBox(width: 1000, height: 1000,child:recipelist)),
+          search_container
         ],
 
       ),
