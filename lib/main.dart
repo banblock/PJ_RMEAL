@@ -43,11 +43,22 @@ class MyHomePageState extends State<MyHomePage>{
   TextEditingController controller = TextEditingController();
   String displayText = "";
   GeminiAI ai = GeminiAI();
-  void _updateText() {
-    String key = dotenv.get("GEMINI_API_KEY");
-    ai.callChatMessage(controller.text);
-    ai.RecommendRecipeModel(key);
+  int _selectedIndex = 0;
+
+
+  Widget _getSelectedPage(int index){
+    switch (index){
+      case 0:
+        return serch_body;
+      case 1:
+        return bookmark_body;
+      case 2:
+        return setting_body;
+      default:
+        return serch_body;
+    }
   }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -55,10 +66,9 @@ class MyHomePageState extends State<MyHomePage>{
       appBar: AppBar(
         title: Text('Text Input Example'),
       ),
-      body: SerchBody(),//MainBody()
+      body: _getSelectedPage(_selectedIndex),
       bottomNavigationBar: BottomAppBar(),
     );
   }
-
 
 }
