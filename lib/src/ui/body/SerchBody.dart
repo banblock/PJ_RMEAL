@@ -1,14 +1,15 @@
-import 'dart:ffi';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:pj_rmeal/src/ui/component/RecipeList.dart';
+import 'package:pj_rmeal/src/ui/component/SearchContainer.dart';
 class SerchBody extends StatefulWidget{
   @override
   SerchState createState() => SerchState();
 }
 
 class SerchState extends State<SerchBody>{
+  final recipelist = RecipeList();
   TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -17,42 +18,8 @@ class SerchState extends State<SerchBody>{
       padding: const EdgeInsets.all(8),
       child: Column(
         children: [
-          Expanded(child: RecipeList()),
-          Container(
-            alignment: Alignment.center,
-            width: 800,
-            height: 50,
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.deepOrange, // 테두리 색상
-                width: 2.0, // 테두리 두께
-              ),
-              borderRadius: BorderRadius.all(Radius.circular(20)), // 테두리 둥글기
-            ),
-            child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      decoration: const InputDecoration(
-                        hintText: 'hint',
-                        border: InputBorder.none,
-                        enabledBorder: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                      ),
-                      controller: controller,
-                    ),
-                  ),
-                  IconButton(
-                      onPressed: () {
-                        print('he');
-                      },
-                      icon: Icon(Icons.search)
-                  )
-
-                ]
-            )
-          )
+          Expanded(child:SizedBox(width: 800, height: 1000,child:recipelist)),
+          SearchContainer()
         ],
 
       ),

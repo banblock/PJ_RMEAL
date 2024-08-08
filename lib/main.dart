@@ -1,7 +1,9 @@
 //import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:pj_rmeal/src/ProcessControl.dart';
 import 'package:pj_rmeal/src/ai/geminiAPI.dart';
+import 'package:pj_rmeal/src/ui/body/SerchBody.dart';
 import 'package:pj_rmeal/src/ui/component/RecipeList.dart';
 import 'package:pj_rmeal/src/ui/body/MainBody.dart';
 
@@ -14,7 +16,6 @@ void main() async{
 class MyApp extends StatelessWidget {
 
   const MyApp({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -23,8 +24,10 @@ class MyApp extends StatelessWidget {
   }
 }
 
-
 class MyHomePage extends StatelessWidget {
+  MainBody mainbody = MainBody();
+  SerchBody serchbody = SerchBody();
+  
   TextEditingController controller = TextEditingController();
   String displayText = "";
   GeminiAI ai = GeminiAI();
@@ -40,7 +43,7 @@ class MyHomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Text Input Example'),
       ),
-      body: MainBody()
+      body: SerchBody()//MainBody()
     );
   }
 }

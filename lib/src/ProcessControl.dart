@@ -4,11 +4,10 @@ import 'package:pj_rmeal/src/webCrawling/crawling.dart';
 class ProcessController{
   GeminiAI ai_processer = GeminiAI();
   DataControl data_processer = DataControl();
-  CrawlRecipePageService crawling_processer = CrawlRecipePageService();
   
 
 
-  void responeAIcomment(){
+  void responeAIcomment(String usercomment, Map<>){
 
   }
   void summarizeRecipe(){
@@ -27,12 +26,13 @@ class ProcessController{
 
   }
 
-
-
-  void crawlingRecipeData(){
+  void makeUserData(){
 
   }
-  void RecipeUpdate(){
+  void writeUserData(){
+
+  }
+  void readUserData(){
 
   }
 
