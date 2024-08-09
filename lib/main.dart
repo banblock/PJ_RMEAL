@@ -32,11 +32,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class MyHomePageState extends State<MyHomePage>{
-  MainBody main_body = MainBody();
-  SerchBody serch_body = SerchBody();
-  SettingBody setting_body = SettingBody();
-  BookMarkBody bookmark_body = BookMarkBody();
-  RecipeBody recipe_body = RecipeBody();
+  late final MainBody main_body;
+  late final SerchBody serch_body;
+  late final SettingBody setting_body;
+  late final BookMarkBody bookmark_body;
+  late final RecipeBody recipe_body;
 
   ProcessController process_controller = ProcessController();
 
@@ -45,6 +45,14 @@ class MyHomePageState extends State<MyHomePage>{
   GeminiAI ai = GeminiAI();
   int _selectedIndex = 0;
 
+  void initState(){
+    super.initState();
+    main_body = MainBody();
+    serch_body = SerchBody(callSearchButton);
+    setting_body = SettingBody();
+    bookmark_body = BookMarkBody();
+    recipe_body = RecipeBody();
+  }
 
   Widget _getSelectedPage(int index){
     switch (index){
@@ -71,4 +79,7 @@ class MyHomePageState extends State<MyHomePage>{
     );
   }
 
+  void callSearchButton(){
+
+  }
 }

@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SearchContainer extends StatelessWidget{
+  void Function() callback;
+  SearchContainer(this.callback);
+
   TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -33,9 +36,7 @@ class SearchContainer extends StatelessWidget{
                   ),
                 ),
                 IconButton(
-                    onPressed: () {
-                      print('he');
-                    },
+                    onPressed: callback,
                     icon: Icon(Icons.search)
                 )
 

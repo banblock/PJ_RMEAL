@@ -4,23 +4,40 @@ import 'package:flutter/painting.dart';
 import 'package:pj_rmeal/src/ui/component/RecipeList.dart';
 import 'package:pj_rmeal/src/ui/component/SearchContainer.dart';
 class SerchBody extends StatefulWidget{
+  late final void Function() search_callback;
+  SerchBody(this.search_callback);
   @override
-  SerchState createState() => SerchState();
+  SerchState createState() => SerchState(this.search_callback);
 }
 
 class SerchState extends State<SerchBody>{
-  SearchContainer search_container = SearchContainer();
+  late final void Function() search_callback;
+  late final SearchContainer search_container;
   final recipelist = RecipeList();
-  TextEditingController controller = TextEditingController();
+  final TextEditingController controller = TextEditingController();
+  bool _visibility  = false;
+
+  SerchState(this.search_callback);
+  // 생성자
+  @override
+  void initState() {
+    super.initState();
+    // initState에서 search_container를 초기화
+    search_container = SearchContainer(this.setRecommendRecipe);
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Padding(
-      padding: const EdgeInsets.all(8),
+    return Center(
+      //padding: const EdgeInsets.all(8),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Expanded(child:SizedBox(width: 1000, height: 1000,child:recipelist)),
+        children: <Widget>[
+          Visibility(
+            child: Expanded(child:SizedBox(width: 1000, height: 1000,child:recipelist)),
+            visible:_visibility
+          ),
           search_container
         ],
 
@@ -29,4 +46,15 @@ class SerchState extends State<SerchBody>{
     );
   }
 
+  void setRecommendRecipe(){
+    search_callback();
+    _visible();
+    //recipelist.updateState(newRecipe);
+  }
+
+  void _visible(){
+    setState(() {
+      _visibility = true;
+    });
+  }
 }

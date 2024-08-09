@@ -9,7 +9,7 @@ class MainBody extends StatelessWidget{
   Widget build(BuildContext context) {
     // TODO: implement build
     return Center(
-      child: SearchContainer()
+      //child: SearchContainer();
     );
   }
   
