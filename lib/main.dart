@@ -7,7 +7,6 @@ import 'package:pj_rmeal/src/ui/body/BookMarkBody.dart';
 import 'package:pj_rmeal/src/ui/body/RecipeBody.dart';
 import 'package:pj_rmeal/src/ui/body/SerchBody.dart';
 import 'package:pj_rmeal/src/ui/body/SettingBody.dart';
-import 'package:pj_rmeal/src/ui/component/RecipeList.dart';
 import 'package:pj_rmeal/src/ui/body/MainBody.dart';
 
 void main() async{
@@ -38,20 +37,22 @@ class MyHomePageState extends State<MyHomePage>{
   late final BookMarkBody bookmark_body;
   late final RecipeBody recipe_body;
 
-  ProcessController process_controller = ProcessController();
-
-  TextEditingController controller = TextEditingController();
+  late ProcessController process_controller;
+  late String key;
   String displayText = "";
   GeminiAI ai = GeminiAI();
   int _selectedIndex = 0;
 
   void initState(){
     super.initState();
+    process_controller = ProcessController();
+    key = dotenv.get("GEMINI_API_KEY");
     main_body = MainBody();
     serch_body = SerchBody(callSearchButton);
     setting_body = SettingBody();
     bookmark_body = BookMarkBody();
     recipe_body = RecipeBody();
+
   }
 
   Widget _getSelectedPage(int index){
@@ -79,7 +80,10 @@ class MyHomePageState extends State<MyHomePage>{
     );
   }
 
-  void callSearchButton(){
-
+  Future<List<String>> callSearchButton(String user_comment) async{
+    Future<List<String>> titles = process_controller.responeAIcomment(user_comment, key);
+    List<String> titles_data = await titles;
+    return titles_data;
   }
+
 }

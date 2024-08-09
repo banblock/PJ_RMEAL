@@ -1,17 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:pj_rmeal/src/ui/component/RecipeList.dart';
 import 'package:pj_rmeal/src/ui/component/SearchContainer.dart';
 class SerchBody extends StatefulWidget{
-  late final void Function() search_callback;
+  late final Future<List<String>> Function(String) search_callback;
   SerchBody(this.search_callback);
   @override
   SerchState createState() => SerchState(this.search_callback);
 }
 
 class SerchState extends State<SerchBody>{
-  late final void Function() search_callback;
+  late final Future<List<String>> Function(String) search_callback;
   late final SearchContainer search_container;
   final recipelist = RecipeList();
   final TextEditingController controller = TextEditingController();
@@ -46,9 +45,13 @@ class SerchState extends State<SerchBody>{
     );
   }
 
-  void setRecommendRecipe(){
-    search_callback();
-    _visible();
+  void setRecommendRecipe(String text) async{
+    Future<List<String>> titles = search_callback(text);
+    List<String> title_data = await titles;
+    recipelist.updateState(title_data);
+    if (_visibility = false){
+      _visible();
+    }
     //recipelist.updateState(newRecipe);
   }
 

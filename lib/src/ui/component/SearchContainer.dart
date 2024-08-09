@@ -2,10 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SearchContainer extends StatelessWidget{
-  void Function() callback;
+  final Function(String) callback;
   SearchContainer(this.callback);
 
-  TextEditingController controller = TextEditingController();
+  TextEditingController _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -32,11 +32,11 @@ class SearchContainer extends StatelessWidget{
                       enabledBorder: InputBorder.none,
                       focusedBorder: InputBorder.none,
                     ),
-                    controller: controller,
+                    controller: _controller,
                   ),
                 ),
                 IconButton(
-                    onPressed: callback,
+                    onPressed: () async {callback(_controller.text);},
                     icon: Icon(Icons.search)
                 )
 
