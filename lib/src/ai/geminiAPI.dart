@@ -58,7 +58,8 @@ class GeminiAI {
   GeminiAI(){
     chatprompt = ChatPrompt();
   }
-  void RecommendRecipeModel(final key)async {
+
+  Future<void> RecommendRecipeModel(final key)async {
     final model = GenerativeModel(model: 'gemini-1.5-flash', apiKey: key);
     String text = chatprompt!.inputPrompt();
     final content = [Content.text(text)];

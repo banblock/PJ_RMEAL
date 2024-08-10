@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pj_rmeal/src/ui/component/RecipeList.dart';
 import 'package:pj_rmeal/src/ui/component/SearchContainer.dart';
+import 'package:provider/provider.dart';
+
+import '../component/RecipeProvider.dart';
 class SerchBody extends StatefulWidget{
   late final Future<List<String>> Function(String) search_callback;
   SerchBody(this.search_callback);
@@ -46,10 +49,11 @@ class SerchState extends State<SerchBody>{
   }
 
   void setRecommendRecipe(String text) async{
-    Future<List<String>> titles = search_callback(text);
-    List<String> title_data = await titles;
-    recipelist.updateState(title_data);
-    if (_visibility = false){
+    List<String> title_data = await search_callback(text);
+    print(title_data);
+    Provider.of<RecipeProvider>(context, listen: false)
+        .updateRecipes(title_data);
+    if (_visibility == false){
       _visible();
     }
     //recipelist.updateState(newRecipe);

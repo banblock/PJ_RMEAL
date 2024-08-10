@@ -8,6 +8,8 @@ import 'package:pj_rmeal/src/ui/body/RecipeBody.dart';
 import 'package:pj_rmeal/src/ui/body/SerchBody.dart';
 import 'package:pj_rmeal/src/ui/body/SettingBody.dart';
 import 'package:pj_rmeal/src/ui/body/MainBody.dart';
+import 'package:pj_rmeal/src/ui/component/RecipeProvider.dart';
+import 'package:provider/provider.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();  // 1번코드
@@ -20,8 +22,11 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: MyHomePage(),
+    return ChangeNotifierProvider(
+      create: (_) => RecipeProvider(),
+      child: MaterialApp(
+        home: MyHomePage(),
+      )
     );
   }
 }
@@ -81,8 +86,7 @@ class MyHomePageState extends State<MyHomePage>{
   }
 
   Future<List<String>> callSearchButton(String user_comment) async{
-    Future<List<String>> titles = process_controller.responeAIcomment(user_comment, key);
-    List<String> titles_data = await titles;
+    List<String> titles_data = await process_controller.responeAIcomment(user_comment, key);
     return titles_data;
   }
 

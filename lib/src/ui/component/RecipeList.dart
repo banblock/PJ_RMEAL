@@ -1,21 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pj_rmeal/src/ui/component/RecipeProvider.dart';
+import 'package:provider/provider.dart';
 class RecipeList extends StatefulWidget{
   _RecipeListStat createState() => _RecipeListStat();
-
-  void updateState(List<String> newRecipe) {
-    _RecipeListStat? state = _myStatefulKey.currentState;
-    state?.getRecipe(newRecipe);
-  }
-
-  // GlobalKey를 사용하여 상태를 참조
-  static final GlobalKey<_RecipeListStat> _myStatefulKey = GlobalKey<_RecipeListStat>();
 }
 class _RecipeListStat extends State<RecipeList>{
-  List<String> recipes = ['밥','빵','떡','국','면','튀김','쿠이쿠이','데프픗','데챠아아'];
+  @override
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    final recipeProvider = Provider.of<RecipeProvider>(context);
+    final recipes = recipeProvider.recipes;
     return ListView.builder(
       padding: const EdgeInsets.all(8),
       itemCount: recipes.length,
@@ -40,11 +37,6 @@ class _RecipeListStat extends State<RecipeList>{
     );
   }
 
-  void getRecipe(List<String> recipelist){
-    setState(() {
-      recipes = recipelist;
-    });
-  }
 }
 
 //List<Map<String, Object>>

@@ -9,14 +9,14 @@ class ProcessController{
 
 
   Future<List<String>> responeAIcomment(String usercomment, String key) async{
-    ai_processer.addTestData();
+    List<Map<String, dynamic>> all_recipe = await csv_processer.loadCSV();
+    ai_processer.setData(all_recipe);
     ai_processer.callChatMessage(usercomment);
-    ai_processer.RecommendRecipeModel(key);
+    await ai_processer.RecommendRecipeModel(key);
     String? response = ai_processer.responseChatMessage();
-    Future<List<Map<String, dynamic>>> response_data = csv_processer.filterDataByIds(parsingStringtoListint(response));
-    Future<List<String>> response_title_data = extractTitles(response_data);
-    List<String> respone_titles = await response_title_data;
-    return respone_titles;
+    List<Map<String, dynamic>> response_data = await csv_processer.filterDataByIds(parsingStringtoListint(response));
+    List<String> response_title_data = await extractTitles(response_data);
+    return response_title_data;
   }
 
   void getRecipeData(){
@@ -53,9 +53,9 @@ class ProcessController{
     }
   }
 
-  Future<List<String>> extractTitles(Future<List<Map<String, dynamic>>> responseData) async {
+  Future<List<String>> extractTitles(List<Map<String, dynamic>> responseData) async {
     // Future를 await하여 데이터를 받아옵니다.
-    List<Map<String, dynamic>> data = await responseData;
+    List<Map<String, dynamic>> data = responseData;
 
     // Map에서 title을 추출하여 List<String>으로 변환합니다.
     List<String> titles = data
