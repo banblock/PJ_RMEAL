@@ -6,7 +6,7 @@ class SettingBody extends StatelessWidget{
     // TODO: implement build
     return Padding(
       padding: EdgeInsets.all(8),
-
+      child: Text('setting'),
 
     );
   }
