@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:pj_rmeal/src/ui/body/UserSetting.dart';
 
 class SettingBody extends StatelessWidget{
   @override
@@ -6,7 +8,30 @@ class SettingBody extends StatelessWidget{
     // TODO: implement build
     return Padding(
       padding: EdgeInsets.all(8),
-      child: Text('setting'),
+      child: Column(
+        children: [
+          TextButton(onPressed: ()=>{
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => UserSettingBody())
+            )
+          }, child: Text("UI")),
+          // TextButton(onPressed: ()=>{
+          //   Navigator.push(
+          //     context,
+          //     MaterialPageRoute(builder: (context) => const )
+          //   )
+          // }, child: Text("User")),
+          // TextButton(onPressed: ()=>{
+          //   Navigator.push(
+          //       context,
+          //       MaterialPageRoute(builder: (context) => const )
+          //   )
+          // }, child: Text("Recipes"))
+
+
+        ],
+      ),
 
     );
   }
