@@ -68,6 +68,7 @@ class MyHomePageState extends State<MyHomePage>{
     setting_body = SettingBody();
     bookmark_body = BookMarkBody();
     recipe_body = RecipeBody();
+    user_box = Hive.box("userBox");
   }
 
   Widget _getSelectedPage(int index){
