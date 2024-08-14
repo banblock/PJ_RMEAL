@@ -1,38 +1,44 @@
+import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:csv/csv.dart';
+class CsvControl {
 
-void main() async {
-  // CSV 파일 경로
-  final String csvFilePath = 'path/to/your/csvfile.csv';
+  Future<List<Map<String, dynamic>>> loadCSV() async {
+    // CSV 파일 읽기
+    final csvString = await rootBundle.loadString('assets/all_recipes.csv');
 
-  // CSV 파일 읽기
-  final input = File(csvFilePath).openRead();
-  final fields = await input
-      .transform(utf8.decoder)
-      .transform(CsvToListConverter())
-      .toList();
+    // CSV 데이터 파싱
+    List<List<dynamic>> csvTable = CsvToListConverter().convert(csvString);
 
-  // 첫 번째 행은 헤더로 간주
-  final header = fields[0];
+    // 첫 번째 행을 헤더로 사용
+    List<String> headers = csvTable[0].cast<String>();
 
-  // 나머지 행은 데이터로 간주하여 JSON 형식으로 변환
-  List<Map<String, dynamic>> jsonList = [];
-  for (int i = 1; i < fields.length; i++) {
-    Map<String, dynamic> jsonData = {};
-    for (int j = 0; j < header.length; j++) {
-      if (header[j] == 'hobbies' && fields[i][j] is String) {
-        // 'hobbies' 필드를 콤마로 구분하여 리스트로 변환
-        jsonData[header[j]] = (fields[i][j] as String).split(',').map((e) => e.trim()).toList();
-      } else {
-        jsonData[header[j]] = fields[i][j];
+    // CSV 데이터 변환
+    List<Map<String, dynamic>> csvData = csvTable.sublist(1).map((row) {
+      Map<String, dynamic> rowData = {};
+      for (int i = 0; i < headers.length; i++) {
+        var value = row[i];
+        if (value is String) {
+          // JSON 형식의 리스트를 파싱
+          try {
+            rowData[headers[i]] = jsonDecode(value);
+          } catch (e) {
+            rowData[headers[i]] = value;
+          }
+        } else {
+          rowData[headers[i]] = value;
+        }
       }
-    }
-    jsonList.add(jsonData);
+      return rowData;
+    }).toList();
+
+    return csvData;
   }
 
-  // 변환된 JSON 데이터 출력
-  for (var data in jsonList) {
-    print(jsonEncode(data));
+  Future<List<Map<String, dynamic>>> filterDataByIds(List<int> ids) async {
+    List<Map<String, dynamic>> data = await loadCSV();
+    return data.where((row) => ids.contains(int.parse(row['id'].toString()))).toList();
   }
+
 }
