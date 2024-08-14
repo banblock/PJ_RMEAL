@@ -1,78 +1,133 @@
 //import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-
-import 'package:path_provider/path_provider.dart';
-import 'package:hive/hive.dart';
-
-import 'package:pj_rmeal/src/dto/user.dart';
-import 'package:pj_rmeal/src/dto/recipe.dart';
-import 'package:pj_rmeal/src/dto/recipes.dart';
-import 'package:pj_rmeal/src/dto/dataControl.dart';
-import 'package:pj_rmeal/src/ui/data_page.dart';
-import 'package:pj_rmeal/src/ui/user_page.dart';
-
-
-// Future<void> migrateData() async {
-//   final directory = await getApplicationDocumentsDirectory();
-//   Hive.init(directory.path);
-//
-//   // 어댑터 등록
-//   Hive.registerAdapter(RecipeAdapter());
-//
-//   // 기존 데이터베이스 열기 (예: 'recipes_v1'라는 이름의 박스 사용)
-//   final oldBox = await Hive.openBox<Recipe>('recipes');
-//
-//   // 새 데이터베이스 열기 (예: 'recipes'라는 이름의 박스 사용)
-//   final newBox = await Hive.openBox<Recipe>('recipe');
-//
-//   // 기존 데이터를 읽어 새로운 데이터 모델로 변환
-//   for (var key in oldBox.keys) {
-//     final oldRecipe = oldBox.get(key)!;
-//
-//     // 현재 데이터 모델이 변경되지 않았으므로 단순히 복사
-//     final newRecipe = Recipe(id: oldRecipe.id);
-//
-//     await newBox.put(key, newRecipe);
-//   }
-//
-//   // 기존 데이터 삭제 (선택 사항)
-//   await oldBox.deleteFromDisk();
-// }
+import 'package:hive_flutter/adapters.dart';
+import 'package:pj_rmeal/src/ProcessControl.dart';
+import 'package:pj_rmeal/src/ai/geminiAPI.dart';
+import 'package:pj_rmeal/src/ui/body/BookMarkBody.dart';
+import 'package:pj_rmeal/src/ui/body/RecipeBody.dart';
+import 'package:pj_rmeal/src/ui/body/SerchBody.dart';
+import 'package:pj_rmeal/src/ui/body/SettingBody.dart';
+import 'package:pj_rmeal/src/ui/body/MainBody.dart';
+import 'package:pj_rmeal/src/ui/component/RecipeProvider.dart';
+import 'package:provider/provider.dart';
 
 void main() async{
-  WidgetsFlutterBinding.ensureInitialized();
-
-  // await migrateData();
-
-  final directory = await getApplicationDocumentsDirectory();
-  Hive.init(directory.path);
-
-  // Register Hive adapters
-  Hive.registerAdapter(UserAdapter());
-  //Hive.registerAdapter(RecipeAdapter());
-  Hive.registerAdapter(RecipesAdapter());
-  await Hive.deleteFromDisk();
-  final dataControl = DataControl();
-  await dataControl.init();
-
-  runApp(MyApp(dataControl: dataControl));
+  await Hive.initFlutter();
+  WidgetsFlutterBinding.ensureInitialized();  // 1번코드
+  await dotenv.load(fileName: ".env");
+  Box box = await Hive.openBox("userBox");
+  print(box.values);
+  if(!box.containsKey("ignoreIngredient")){
+    print("suiiiiii");
+    box.put("ignoreIngredient",[]);
+  }
+  if(!box.containsKey("bookmark")){
+    print("suiiiiii");
+    box.put("bookmark",[]);
+  }
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final DataControl dataControl;
+  const MyApp({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (_) => RecipeProvider(),
+      child: MaterialApp(
+        home: MyHomePage(),
+      )
+    );
+  }
+}
 
-  const MyApp({Key? key, required this.dataControl}) : super(key: key);
+class MyHomePage extends StatefulWidget {
+  MyHomePageState createState() => MyHomePageState();
+}
+
+class MyHomePageState extends State<MyHomePage>{
+  late final Box user_box;
+  late final MainBody main_body;
+  late final SerchBody serch_body;
+  late final SettingBody setting_body;
+  late final BookMarkBody bookmark_body;
+  late final RecipeBody recipe_body;
+  late ProcessController process_controller;
+  late final String key;
+  GeminiAI ai = GeminiAI();
+  int _selectedIndex = 0;
+
+
+  void initState() {
+    super.initState();
+    process_controller = ProcessController();
+    key = dotenv.get("GEMINI_API_KEY");
+    main_body = MainBody();
+    serch_body = SerchBody(callSearchButton);
+    setting_body = SettingBody();
+    bookmark_body = BookMarkBody();
+    recipe_body = RecipeBody();
+    user_box = Hive.box("userBox");
+  }
+
+  Widget _getSelectedPage(int index){
+    switch (index){
+      case 0:
+        return serch_body;
+      case 1:
+        return bookmark_body;
+      case 2:
+        return setting_body;
+      default:
+        return serch_body;
+    }
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(colorSchemeSeed: Colors.green),
-      home: DataPage(dataControl: dataControl),
-      routes: {
-        '/userPage': (context) => UserPage(dataControl: dataControl),
-      },
+    // TODO: implement build
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Text Input Example'),
+      ),
+      body: _getSelectedPage(_selectedIndex),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: 'Search',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.bookmark),
+            label: 'Bookmark',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Settings',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+      ),
     );
   }
+
+  Future<List<String>> callSearchButton(String user_comment) async{
+    List<String> titles_data = await process_controller.responeAIcomment(user_comment, key);
+    return titles_data;
+  }
+  @override
+  void dispose() {
+    user_box.close(); // 박스 닫기
+    super.dispose();
+  }
+
+
 }
