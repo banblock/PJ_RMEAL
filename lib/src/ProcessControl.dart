@@ -29,16 +29,6 @@ class ProcessController{
 
   }
 
-  void makeUserData(){
-
-  }
-  void writeUserData(){
-
-  }
-  void readUserData(){
-
-  }
-
   List<int> parsingStringtoListint(String? string) {
     if (string != null) {
       // 문자열에서 대괄호 제거

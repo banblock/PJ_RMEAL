@@ -5,7 +5,6 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:pj_rmeal/src/ProcessControl.dart';
 import 'package:pj_rmeal/src/ai/geminiAPI.dart';
 import 'package:pj_rmeal/src/dto/Userdata.dart';
-import 'package:pj_rmeal/src/dto/user.dart';
 import 'package:pj_rmeal/src/ui/body/BookMarkBody.dart';
 import 'package:pj_rmeal/src/ui/body/RecipeBody.dart';
 import 'package:pj_rmeal/src/ui/body/SerchBody.dart';
@@ -19,9 +18,14 @@ void main() async{
   WidgetsFlutterBinding.ensureInitialized();  // 1번코드
   await dotenv.load(fileName: ".env");
   Box box = await Hive.openBox("userBox");
-  if(box.isEmpty){
+  print(box.values);
+  if(!box.containsKey("ignoreIngredient")){
+    print("suiiiiii");
     box.put("ignoreIngredient",[]);
-    box.put("bookmarkId",[]);
+  }
+  if(!box.containsKey("bookmark")){
+    print("suiiiiii");
+    box.put("bookmark",[]);
   }
   runApp(const MyApp());
 }
@@ -44,7 +48,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class MyHomePageState extends State<MyHomePage>{
-  late final Box<UserData> user_box;
+  late final Box user_box;
   late final MainBody main_body;
   late final SerchBody serch_body;
   late final SettingBody setting_body;
@@ -65,6 +69,7 @@ class MyHomePageState extends State<MyHomePage>{
     setting_body = SettingBody();
     bookmark_body = BookMarkBody();
     recipe_body = RecipeBody();
+    user_box = Hive.box("userBox");
   }
 
   Widget _getSelectedPage(int index){
@@ -119,5 +124,12 @@ class MyHomePageState extends State<MyHomePage>{
     List<String> titles_data = await process_controller.responeAIcomment(user_comment, key);
     return titles_data;
   }
+
+  @override
+  void dispose() {
+    user_box.close(); // 박스 닫기
+    super.dispose();
+  }
+
 
 }

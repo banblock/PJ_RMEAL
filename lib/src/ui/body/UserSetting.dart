@@ -12,13 +12,21 @@ class UserSettingState extends State<UserSettingBody>{
   late var ignores;
   late Box _ignordata;
   late String inputText;
+  late bool list_empty;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _ignordata = Hive.box("userBox");
+
     ignores = _ignordata.get("ignoreIngredient");
-    ignores ??= [nonemessage];
+    print(ignores);
+    if(ignores.isEmpty){
+      list_empty = true;
+    }else{
+      list_empty = false;
+    }
+
   }
   @override
   Widget build(BuildContext context) {
@@ -32,45 +40,30 @@ class UserSettingState extends State<UserSettingBody>{
             IconButton(onPressed: ()=>{Navigator.pop(context)}, icon: Icon(Icons.arrow_back)),
             SizedBox(width: 300,),Text("UserSetting")
           ],),
-          Container(
-            height: 1000,
-            width: 1000,
-            child: Column(
+          Expanded(child: Column(
                 children: [
                   Row(
                       children:[
                         Container(child: Text('예외 재료')),
-                        ElevatedButton(onPressed: ()=>addIgnoreIngredient(), child: Text('추가')),
+                        ElevatedButton(onPressed: () async => await addIgnoreIngredient(), child: Text('추가')),
                       ]
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.circular(30),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 5,
-                          blurRadius: 7,
-                          offset: Offset(0, 3), // changes position of shadow
-                        ),
-                      ],
-                    ),
-                    child: ListView.builder(
-                      itemCount: ignores.length,
-                      itemBuilder: (BuildContext context, int index){
-                        return Container(
-                          height: 100,
-                          child: Center(
-                              child:Row(
-                                  children: [
-                                    Text(ignores[index]),
-                                    IconButton(onPressed: () => {removeIgnoreIngredient(ignores[index])}, icon: Icon(Icons.delete))
-                                  ]
-                              )),
-                        );
-                      }
-                  )),
+                  Expanded(child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey,
+                        borderRadius: BorderRadius.circular(30),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: Offset(0, 3), // changes position of shadow
+                          ),
+                        ],
+                      ),
+                      child: isEmptyLsit()
+                    )
+                  ),
               ],
             ),
           )
@@ -79,8 +72,8 @@ class UserSettingState extends State<UserSettingBody>{
     );
   }
 
-  void addIgnoreIngredient(){
-    _showTextInputDialog();
+  Future<void> addIgnoreIngredient()async{
+    await _showTextInputDialog();
     setState(() {
       var ig = _ignordata.get("ignoreIngredient");
       if (ig.contains(inputText)){
@@ -88,7 +81,10 @@ class UserSettingState extends State<UserSettingBody>{
       }else{
         ig.add(inputText);
         ignores = ig;
-        _ignordata.put("ignoreIngredient", ig);
+        _ignordata.put("ignoreIngredient",ig);
+        if(list_empty){
+          list_empty = false;
+        }
       }
     });
   }
@@ -99,6 +95,9 @@ class UserSettingState extends State<UserSettingBody>{
       ig.remove(igitem);
       ignores = ig;
       _ignordata.put("ignoreIngredient", ig);
+      if(ignores.isEmpty){
+        list_empty = true;
+      }
     });
   }
 
@@ -136,6 +135,29 @@ class UserSettingState extends State<UserSettingBody>{
       setState(() {
         inputText = result;
       });
+    }
+  }
+
+  Widget isEmptyLsit(){
+    print(ignores.length);
+    if(list_empty){
+      return Text(nonemessage);
+    }else{
+      return ListView.builder(
+          itemCount: ignores.length,
+          itemBuilder: (BuildContext context, int index){
+            return Container(
+              height: 100,
+              child: Center(
+                  child:Row(
+                      children: [
+                        Text(ignores[index]),
+                        IconButton(onPressed: () => {removeIgnoreIngredient(ignores[index])}, icon: Icon(Icons.delete))
+                      ]
+                  )),
+            );
+          }
+      );
     }
   }
 
