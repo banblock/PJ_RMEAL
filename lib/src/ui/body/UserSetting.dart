@@ -4,10 +4,13 @@ import 'package:pj_rmeal/src/dto/Userdata.dart';
 import 'package:hive_flutter/adapters.dart';
 
 class UserSettingBody extends StatefulWidget{
-  UserSettingState createState() => UserSettingState();
+  late final Box user_box;
+  UserSettingBody(this.user_box);
+  UserSettingState createState() => UserSettingState(user_box);
 }
 
 class UserSettingState extends State<UserSettingBody>{
+  UserSettingState(this._ignordata);
   final String nonemessage = '예외 재료가 없습니다.';
   late var ignores;
   late Box _ignordata;
@@ -16,9 +19,6 @@ class UserSettingState extends State<UserSettingBody>{
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();
-    _ignordata = Hive.box("userBox");
-
     ignores = _ignordata.get("ignoreIngredient");
     print(ignores);
     if(ignores.isEmpty){

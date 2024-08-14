@@ -4,7 +4,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:pj_rmeal/src/ProcessControl.dart';
 import 'package:pj_rmeal/src/ai/geminiAPI.dart';
-import 'package:pj_rmeal/src/dto/Userdata.dart';
 import 'package:pj_rmeal/src/ui/body/BookMarkBody.dart';
 import 'package:pj_rmeal/src/ui/body/RecipeBody.dart';
 import 'package:pj_rmeal/src/ui/body/SerchBody.dart';
@@ -69,7 +68,6 @@ class MyHomePageState extends State<MyHomePage>{
     setting_body = SettingBody();
     bookmark_body = BookMarkBody();
     recipe_body = RecipeBody();
-    user_box = Hive.box("userBox");
   }
 
   Widget _getSelectedPage(int index){
@@ -124,7 +122,6 @@ class MyHomePageState extends State<MyHomePage>{
     List<String> titles_data = await process_controller.responeAIcomment(user_comment, key);
     return titles_data;
   }
-
   @override
   void dispose() {
     user_box.close(); // 박스 닫기

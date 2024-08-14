@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:pj_rmeal/src/ui/body/UserSetting.dart';
 
 class SettingBody extends StatelessWidget{
+  final Box user_box = Hive.box("userBox");
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -13,9 +15,9 @@ class SettingBody extends StatelessWidget{
           TextButton(onPressed: ()=>{
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => UserSettingBody())
+              MaterialPageRoute(builder: (context) => UserSettingBody(user_box))
             )
-          }, child: Text("UI")),
+          }, child: Text("User")),
           // TextButton(onPressed: ()=>{
           //   Navigator.push(
           //     context,
