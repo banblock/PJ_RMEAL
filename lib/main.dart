@@ -1,11 +1,11 @@
 //import 'dart:ffi';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:pj_rmeal/src/ProcessControl.dart';
 import 'package:pj_rmeal/src/ai/geminiAPI.dart';
 import 'package:pj_rmeal/src/ui/body/BookMarkBody.dart';
-import 'package:pj_rmeal/src/ui/body/RecipeBody.dart';
 import 'package:pj_rmeal/src/ui/body/SerchBody.dart';
 import 'package:pj_rmeal/src/ui/body/SettingBody.dart';
 import 'package:pj_rmeal/src/ui/body/MainBody.dart';
@@ -94,6 +94,15 @@ class MyHomePageState extends State<MyHomePage>{
     return Scaffold(
       appBar: AppBar(
         title: Text('Text Input Example'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.exit_to_app),
+            onPressed: () {
+              // 앱 종료
+              SystemNavigator.pop();
+            },
+          ),
+        ],
       ),
       body: _getSelectedPage(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
@@ -120,11 +129,6 @@ class MyHomePageState extends State<MyHomePage>{
   Future<List<Map<String,dynamic>>> callSearchButton(String user_comment) async{
     List<Map<String,dynamic>> titles_data = await process_controller.responeAIcommentforMap(user_comment, key);
     return titles_data;
-  }
-  @override
-  void dispose() {
-    user_box.close(); // 박스 닫기
-    super.dispose();
   }
 
 

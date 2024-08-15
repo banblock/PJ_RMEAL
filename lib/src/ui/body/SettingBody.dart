@@ -23,7 +23,7 @@ class SettingBody extends StatelessWidget{
           //     context,
           //     MaterialPageRoute(builder: (context) => const )
           //   )
-          // }, child: Text("User")),
+          // }, child: Text("UI")),
           // TextButton(onPressed: ()=>{
           //   Navigator.push(
           //       context,

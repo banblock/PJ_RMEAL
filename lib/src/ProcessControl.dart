@@ -9,12 +9,14 @@ class ProcessController{
 
 
   Future<List<Map<String,dynamic>>> responeAIcommentforMap(String usercomment, String key) async{
+    print('process in');
     List<Map<String, dynamic>> all_recipe = await csv_processer.loadCSV();
     ai_processer.setData(all_recipe);
     ai_processer.callChatMessage(usercomment);
     await ai_processer.RecommendRecipeModel(key);
     String? response = ai_processer.responseChatMessage();
     List<Map<String, dynamic>> response_data = await csv_processer.filterDataByIds(parsingStringtoListint(response));
+    print('process out');
     return response_data;
   }
 
