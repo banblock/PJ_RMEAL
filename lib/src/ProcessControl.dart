@@ -19,15 +19,21 @@ class ProcessController{
     return response_title_data;
   }
 
-  void getRecipeData(){
-
+  Future<List<Map<String,dynamic>>> responeAIcommentforMap(String usercomment, String key) async{
+    List<Map<String, dynamic>> all_recipe = await csv_processer.loadCSV();
+    ai_processer.setData(all_recipe);
+    ai_processer.callChatMessage(usercomment);
+    await ai_processer.RecommendRecipeModel(key);
+    String? response = ai_processer.responseChatMessage();
+    List<Map<String, dynamic>> response_data = await csv_processer.filterDataByIds(parsingStringtoListint(response));
+    return response_data;
   }
-  void addRecipeData(){
 
+  Future<List<String>> responeAIcommentforTitle(List<Map<String,dynamic>> mapdata)async{
+    List<String> response_title_data = await extractTitles(mapdata);
+    return response_title_data;
   }
-  void modifyData(){
 
-  }
 
   List<int> parsingStringtoListint(String? string) {
     if (string != null) {
