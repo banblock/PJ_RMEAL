@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pj_rmeal/src/dto/Userdata.dart';
 import 'package:hive_flutter/adapters.dart';
 
 class UserSettingBody extends StatefulWidget{
@@ -18,6 +17,7 @@ class UserSettingState extends State<UserSettingBody>{
   late bool list_empty;
   @override
   void initState() {
+    super.initState();
     // TODO: implement initState
     ignores = _ignordata.get("ignoreIngredient");
     print(ignores);

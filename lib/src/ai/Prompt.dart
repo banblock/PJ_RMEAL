@@ -1,4 +1,3 @@
-import 'package:google_generative_ai/google_generative_ai.dart';
 class Prompt{
   String prompt ='';
   late String base_prompt;

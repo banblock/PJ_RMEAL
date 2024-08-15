@@ -5,7 +5,7 @@ class SearchContainer extends StatelessWidget{
   final Function(String) callback;
   SearchContainer(this.callback);
 
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
