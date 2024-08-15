@@ -8,17 +8,6 @@ class ProcessController{
   CsvControl csv_processer = CsvControl();
 
 
-  Future<List<String>> responeAIcomment(String usercomment, String key) async{
-    List<Map<String, dynamic>> all_recipe = await csv_processer.loadCSV();
-    ai_processer.setData(all_recipe);
-    ai_processer.callChatMessage(usercomment);
-    await ai_processer.RecommendRecipeModel(key);
-    String? response = ai_processer.responseChatMessage();
-    List<Map<String, dynamic>> response_data = await csv_processer.filterDataByIds(parsingStringtoListint(response));
-    List<String> response_title_data = await extractTitles(response_data);
-    return response_title_data;
-  }
-
   Future<List<Map<String,dynamic>>> responeAIcommentforMap(String usercomment, String key) async{
     List<Map<String, dynamic>> all_recipe = await csv_processer.loadCSV();
     ai_processer.setData(all_recipe);

@@ -6,14 +6,14 @@ import 'package:provider/provider.dart';
 
 import '../component/RecipeProvider.dart';
 class SerchBody extends StatefulWidget{
-  late final Future<List<String>> Function(String) search_callback;
+  late final Future<List<Map<String,dynamic>>> Function(String) search_callback;
   SerchBody(this.search_callback);
   @override
   SerchState createState() => SerchState(this.search_callback);
 }
 
 class SerchState extends State<SerchBody>{
-  late final Future<List<String>> Function(String) search_callback;
+  late final Future<List<Map<String,dynamic>>> Function(String) search_callback;
   late final SearchContainer search_container;
   final recipelist = RecipeList();
   final TextEditingController controller = TextEditingController();
@@ -49,7 +49,7 @@ class SerchState extends State<SerchBody>{
   }
 
   void setRecommendRecipe(String text) async{
-    List<String> title_data = await search_callback(text);
+    List<Map<String,dynamic>> title_data = await search_callback(text);
     print(title_data);
     Provider.of<RecipeProvider>(context, listen: false)
         .updateRecipes(title_data);

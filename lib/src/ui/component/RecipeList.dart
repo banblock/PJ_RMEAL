@@ -22,7 +22,7 @@ class _RecipeListStat extends State<RecipeList>{
           onTap: () =>{
             Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => RecipeBody())
+                MaterialPageRoute(builder: (context) => RecipeBody(recipes[index]))
             )
           },
           child:Container(
@@ -37,7 +37,7 @@ class _RecipeListStat extends State<RecipeList>{
             child: Center(
                 child:Row(
                 children: [
-                  Text(recipes[index]),
+                  Text(recipes[index]["title"]),
                 ]
             )),
           )

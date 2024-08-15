@@ -52,7 +52,6 @@ class MyHomePageState extends State<MyHomePage>{
   late final SerchBody serch_body;
   late final SettingBody setting_body;
   late final BookMarkBody bookmark_body;
-  late final RecipeBody recipe_body;
   late ProcessController process_controller;
   late final String key;
   GeminiAI ai = GeminiAI();
@@ -67,7 +66,6 @@ class MyHomePageState extends State<MyHomePage>{
     serch_body = SerchBody(callSearchButton);
     setting_body = SettingBody();
     bookmark_body = BookMarkBody();
-    recipe_body = RecipeBody();
     user_box = Hive.box("userBox");
   }
 
@@ -119,8 +117,8 @@ class MyHomePageState extends State<MyHomePage>{
     );
   }
 
-  Future<List<String>> callSearchButton(String user_comment) async{
-    List<String> titles_data = await process_controller.responeAIcomment(user_comment, key);
+  Future<List<Map<String,dynamic>>> callSearchButton(String user_comment) async{
+    List<Map<String,dynamic>> titles_data = await process_controller.responeAIcommentforMap(user_comment, key);
     return titles_data;
   }
   @override
