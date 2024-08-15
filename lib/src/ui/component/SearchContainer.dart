@@ -36,13 +36,40 @@ class SearchContainer extends StatelessWidget{
                   ),
                 ),
                 IconButton(
-                    onPressed: () async {callback(_controller.text);},
+                    onPressed: () async {
+                      _showLoadingDialog(context);
+                      await callback(_controller.text);
+                      Navigator.of(context, rootNavigator: true).pop();
+                    },
                     icon: Icon(Icons.search)
                 )
 
             ]
         )
       );
+  }
+
+  Future<void> _showLoadingDialog(BuildContext context)async{
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        // 다이얼로그의 핸들을 저장합니다.
+        return Dialog(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(width: 20),
+                Text('Loading...'),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
 }

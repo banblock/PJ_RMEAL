@@ -1,11 +1,11 @@
 //import 'dart:ffi';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:pj_rmeal/src/ProcessControl.dart';
 import 'package:pj_rmeal/src/ai/geminiAPI.dart';
 import 'package:pj_rmeal/src/ui/body/BookMarkBody.dart';
-import 'package:pj_rmeal/src/ui/body/RecipeBody.dart';
 import 'package:pj_rmeal/src/ui/body/SerchBody.dart';
 import 'package:pj_rmeal/src/ui/body/SettingBody.dart';
 import 'package:pj_rmeal/src/ui/body/MainBody.dart';
@@ -52,7 +52,6 @@ class MyHomePageState extends State<MyHomePage>{
   late final SerchBody serch_body;
   late final SettingBody setting_body;
   late final BookMarkBody bookmark_body;
-  late final RecipeBody recipe_body;
   late ProcessController process_controller;
   late final String key;
   GeminiAI ai = GeminiAI();
@@ -61,45 +60,16 @@ class MyHomePageState extends State<MyHomePage>{
 
   void initState() {
     super.initState();
-    _initialize();
-    // process_controller = ProcessController();
-    // key = dotenv.get("GEMINI_API_KEY");
-    // main_body = MainBody();
-    // serch_body = SerchBody(callSearchButton);
-    // setting_body = SettingBody();
-    // bookmark_body = BookMarkBody();
-    // recipe_body = RecipeBody();
-    // user_box = Hive.box("userBox");
-    //
-    // print("ProcessController initialized: $process_controller");
-    // print("GEMINI_API_KEY: $key");
-    // print("MainBody initialized: $main_body");
-    // print("SerchBody initialized: $serch_body");
-    // print("SettingBody initialized: $setting_body");
-    // print("BookMarkBody initialized: $bookmark_body");
-    // print("RecipeBody initialized: $recipe_body");
-    // print("Hive box 'userBox' opened: $user_box");
-    //
-    // setState(() {});
+    process_controller = ProcessController();
+    key = dotenv.get("GEMINI_API_KEY");
+    main_body = MainBody();
+    serch_body = SerchBody(callSearchButton);
+    setting_body = SettingBody();
+    bookmark_body = BookMarkBody();
+    user_box = Hive.box("userBox");
   }
 
-  Future<void> _initialize() async {
-    try {
-      process_controller = ProcessController();
-      key = dotenv.get("GEMINI_API_KEY");
-      main_body = MainBody();
-      serch_body = SerchBody(callSearchButton);
-      setting_body = SettingBody();
-      bookmark_body = BookMarkBody();
-      recipe_body = RecipeBody();
-      user_box = Hive.box("userBox");
-      setState(() {});  // UI 업데이트
-    } catch (e) {
-      print("Initialization error: $e");
-    }
-  }
   Widget _getSelectedPage(int index){
-    print('Selected index: $index');
     switch (index){
       case 0:
         return serch_body;
@@ -124,8 +94,16 @@ class MyHomePageState extends State<MyHomePage>{
     return Scaffold(
       appBar: AppBar(
         title: Text('Text Input Example'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.exit_to_app),
+            onPressed: () {
+              // 앱 종료
+              SystemNavigator.pop();
+            },
+          ),
+        ],
       ),
-      //backgroundColor: Colors.lightBlueAccent, // 배경 색 변경
       body: _getSelectedPage(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -148,16 +126,10 @@ class MyHomePageState extends State<MyHomePage>{
     );
   }
 
-  Future<List<String>> callSearchButton(String user_comment) async{
-    List<String> titles_data = await process_controller.responeAIcomment(user_comment, key);
+  Future<List<Map<String,dynamic>>> callSearchButton(String user_comment) async{
+    List<Map<String,dynamic>> titles_data = await process_controller.responeAIcommentforMap(user_comment, key);
     return titles_data;
   }
-  @override
-  void dispose() {
-    print("위젯 닫는중");
-    if (Hive.isBoxOpen("userBox")) {
-      user_box.close();
-    }
-    super.dispose();
-  }
+
+
 }
