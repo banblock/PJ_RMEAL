@@ -1,6 +1,6 @@
 import 'package:pj_rmeal/src/ai/geminiAPI.dart';
 import 'package:pj_rmeal/src/dto/CsvControl.dart';
-import 'package:pj_rmeal/src/dto/data_control.dart';
+import 'package:pj_rmeal/src/dto/dataControl.dart';
 import 'package:pj_rmeal/src/webCrawling/crawling.dart';
 class ProcessController{
   GeminiAI ai_processer = GeminiAI();
