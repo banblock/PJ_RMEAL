@@ -61,17 +61,45 @@ class MyHomePageState extends State<MyHomePage>{
 
   void initState() {
     super.initState();
-    process_controller = ProcessController();
-    key = dotenv.get("GEMINI_API_KEY");
-    main_body = MainBody();
-    serch_body = SerchBody(callSearchButton);
-    setting_body = SettingBody();
-    bookmark_body = BookMarkBody();
-    recipe_body = RecipeBody();
-    user_box = Hive.box("userBox");
+    _initialize();
+    // process_controller = ProcessController();
+    // key = dotenv.get("GEMINI_API_KEY");
+    // main_body = MainBody();
+    // serch_body = SerchBody(callSearchButton);
+    // setting_body = SettingBody();
+    // bookmark_body = BookMarkBody();
+    // recipe_body = RecipeBody();
+    // user_box = Hive.box("userBox");
+    //
+    // print("ProcessController initialized: $process_controller");
+    // print("GEMINI_API_KEY: $key");
+    // print("MainBody initialized: $main_body");
+    // print("SerchBody initialized: $serch_body");
+    // print("SettingBody initialized: $setting_body");
+    // print("BookMarkBody initialized: $bookmark_body");
+    // print("RecipeBody initialized: $recipe_body");
+    // print("Hive box 'userBox' opened: $user_box");
+    //
+    // setState(() {});
   }
 
+  Future<void> _initialize() async {
+    try {
+      process_controller = ProcessController();
+      key = dotenv.get("GEMINI_API_KEY");
+      main_body = MainBody();
+      serch_body = SerchBody(callSearchButton);
+      setting_body = SettingBody();
+      bookmark_body = BookMarkBody();
+      recipe_body = RecipeBody();
+      user_box = Hive.box("userBox");
+      setState(() {});  // UI 업데이트
+    } catch (e) {
+      print("Initialization error: $e");
+    }
+  }
   Widget _getSelectedPage(int index){
+    print('Selected index: $index');
     switch (index){
       case 0:
         return serch_body;
@@ -97,6 +125,7 @@ class MyHomePageState extends State<MyHomePage>{
       appBar: AppBar(
         title: Text('Text Input Example'),
       ),
+      //backgroundColor: Colors.lightBlueAccent, // 배경 색 변경
       body: _getSelectedPage(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -125,9 +154,10 @@ class MyHomePageState extends State<MyHomePage>{
   }
   @override
   void dispose() {
-    user_box.close(); // 박스 닫기
+    print("위젯 닫는중");
+    if (Hive.isBoxOpen("userBox")) {
+      user_box.close();
+    }
     super.dispose();
   }
-
-
 }
