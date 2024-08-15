@@ -80,10 +80,8 @@ class MyHomePageState extends State<MyHomePage>{
       case 0:
         return serch_body;
       case 1:
-
-      case 2:
         return bookmark_body;
-      case 3:
+      case 2:
         return setting_body;
       default:
         return serch_body;
@@ -116,19 +114,15 @@ class MyHomePageState extends State<MyHomePage>{
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
+            icon: Icon(Icons.search, color: Colors.deepOrange,),
             label: 'Search',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.class_outlined),
-            label: 'Recipes',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bookmark),
+            icon: Icon(Icons.bookmark, color: Colors.deepOrange),
             label: 'Bookmark',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
+            icon: Icon(Icons.settings, color: Colors.deepOrange),
             label: 'Settings',
           ),
         ],
