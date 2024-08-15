@@ -49,10 +49,10 @@ class SerchState extends State<SerchBody>{
   }
 
   void setRecommendRecipe(String text) async{
-    List<Map<String,dynamic>> title_data = await search_callback(text);
-    print(title_data);
+    List<Map<String,dynamic>> recipe_data = await search_callback(text);
+    print(recipe_data);
     Provider.of<RecipeProvider>(context, listen: false)
-        .updateRecipes(title_data);
+        .updateRecipes(recipe_data);
     if (_visibility == false){
       _visible();
     }

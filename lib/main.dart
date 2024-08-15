@@ -53,6 +53,7 @@ class MyHomePageState extends State<MyHomePage>{
   late final SettingBody setting_body;
   late final BookMarkBody bookmark_body;
   late ProcessController process_controller;
+  late List<Map<String,dynamic>> bookmark_data;
   late final String key;
   GeminiAI ai = GeminiAI();
   int _selectedIndex = 0;
@@ -60,6 +61,7 @@ class MyHomePageState extends State<MyHomePage>{
 
   void initState() {
     super.initState();
+    bookmark_data = [];
     process_controller = ProcessController();
     key = dotenv.get("GEMINI_API_KEY");
     main_body = MainBody();
@@ -70,19 +72,25 @@ class MyHomePageState extends State<MyHomePage>{
   }
 
   Widget _getSelectedPage(int index){
+    if(index == 1){
+      // Bookmark 탭으로 이동할 때마다 호출
+      callBookMarkRecipe();
+    }
     switch (index){
       case 0:
         return serch_body;
       case 1:
-        return bookmark_body;
+
       case 2:
+        return bookmark_body;
+      case 3:
         return setting_body;
       default:
         return serch_body;
     }
   }
 
-  void _onItemTapped(int index) {
+  void _onItemTapped(int index){
     setState(() {
       _selectedIndex = index;
     });
@@ -112,6 +120,10 @@ class MyHomePageState extends State<MyHomePage>{
             label: 'Search',
           ),
           BottomNavigationBarItem(
+            icon: Icon(Icons.class_outlined),
+            label: 'Recipes',
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.bookmark),
             label: 'Bookmark',
           ),
@@ -131,5 +143,14 @@ class MyHomePageState extends State<MyHomePage>{
     return titles_data;
   }
 
+  void callBookMarkRecipe() async{
+    List<int> ids = user_box.get("bookmark");
+    print(ids);
+    if(!ids.isEmpty){
+      bookmark_data = await process_controller.readRecipeDataforId(ids);
+      Provider.of<RecipeProvider>(context, listen: false)
+          .updateRecipes(bookmark_data);
+    }
+  }
 
 }

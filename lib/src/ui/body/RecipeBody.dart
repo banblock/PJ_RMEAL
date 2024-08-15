@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class RecipeBody extends StatefulWidget {
@@ -13,6 +14,8 @@ class RecipeBody extends StatefulWidget {
 }
 
 class RecipeBodyState extends State<RecipeBody> {
+  late bool _isbookmarked;
+  late Box user_box;
   int activeIndex = 0;
   late List<String> recipe_instruction;
 
@@ -21,6 +24,13 @@ class RecipeBodyState extends State<RecipeBody> {
     // TODO: implement initState
     super.initState();
     splitRecipe(widget.recipe["instruction"]);
+    user_box = Hive.box("userBox");
+    var bookmark_list = user_box.get("bookmark");
+    if(bookmark_list.contains(widget.recipe["id"])){
+      _isbookmarked = true;
+    }else{
+      _isbookmarked = false;
+    }
   }
 
   @override
@@ -31,11 +41,24 @@ class RecipeBodyState extends State<RecipeBody> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            IconButton(onPressed: ()=>{Navigator.pop(context)}, icon: Icon(Icons.arrow_back)),
-            Text(
-              widget.recipe["title"],
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            Row(
+              children: [
+                IconButton(onPressed: ()=>{Navigator.pop(context)}, icon: Icon(Icons.arrow_back)),
+                Text(
+                  widget.recipe["title"],
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                GestureDetector(
+                  onTap: _toggleBookMark,
+                  child: Icon(
+                    _isbookmarked ? Icons.star : Icons.star_border,
+                    color: _isbookmarked ? Colors.yellow : Colors.grey,
+                    size: 50.0,
+                  ),
+                ),
+              ],
             ),
+
             SizedBox(height: 8),
             Text(
               widget.recipe["introduction"],
@@ -122,4 +145,17 @@ class RecipeBodyState extends State<RecipeBody> {
 
   }
 
+  void _toggleBookMark(){
+    setState(() {
+      var bookmark_list = user_box.get("bookmark");
+      if(_isbookmarked){
+        bookmark_list.remove(widget.recipe["id"]);
+        user_box.put("bookmark", bookmark_list);
+      }else{
+        bookmark_list.add(widget.recipe["id"]);
+        user_box.put("bookmark", bookmark_list);
+      }
+      _isbookmarked = !_isbookmarked;
+    });
+  }
 }

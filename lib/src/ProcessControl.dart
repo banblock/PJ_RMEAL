@@ -53,4 +53,8 @@ class ProcessController{
     return titles;
   }
 
+  Future<List<Map<String,dynamic>>> readRecipeDataforId(List<int> ids) async {
+    return await csv_processer.filterDataByIds(ids);
+  }
+
 }
