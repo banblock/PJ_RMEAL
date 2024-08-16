@@ -12,7 +12,7 @@ class RecipeProvider extends ChangeNotifier {
 
   void addRecipe(Map<String,dynamic> recipe) {
     _recipes.add(recipe);
-    notifyListeners();  // 상태 변경 알림
+    notifyListeners();  // 상태 변경 알림/
   }
 
 

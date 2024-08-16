@@ -6,7 +6,7 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:pj_rmeal/src/ProcessControl.dart';
 import 'package:pj_rmeal/src/ai/geminiAPI.dart';
 import 'package:pj_rmeal/src/ui/body/BookMarkBody.dart';
-import 'package:pj_rmeal/src/ui/body/SerchBody.dart';
+import 'package:pj_rmeal/src/ui/body/SearchBody.dart';
 import 'package:pj_rmeal/src/ui/body/SettingBody.dart';
 import 'package:pj_rmeal/src/ui/body/MainBody.dart';
 import 'package:pj_rmeal/src/ui/component/RecipeProvider.dart';
@@ -23,7 +23,7 @@ void main() async{
     box.put("ignoreIngredient",[]);
   }
   if(!box.containsKey("bookmark")){
-    print("suiiiiii");
+    print("suiiiiiii");
     box.put("bookmark",[]);
   }
   runApp(const MyApp());
@@ -49,7 +49,7 @@ class MyHomePage extends StatefulWidget {
 class MyHomePageState extends State<MyHomePage>{
   late final Box user_box;
   late final MainBody main_body;
-  late final SerchBody serch_body;
+  late final SearchBody serch_body;
   late final SettingBody setting_body;
   late final BookMarkBody bookmark_body;
   late ProcessController process_controller;
@@ -63,7 +63,7 @@ class MyHomePageState extends State<MyHomePage>{
     process_controller = ProcessController();
     key = dotenv.get("GEMINI_API_KEY");
     main_body = MainBody();
-    serch_body = SerchBody(callSearchButton);
+    serch_body = SearchBody(callSearchButton);
     setting_body = SettingBody();
     bookmark_body = BookMarkBody();
     user_box = Hive.box("userBox");
