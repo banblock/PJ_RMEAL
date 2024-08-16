@@ -19,7 +19,7 @@ class _RecipeListStat extends State<RecipeList> {
       itemCount: recipes.length,
       itemBuilder: (BuildContext context, int index) {
         return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 25.0),  // 아이템 간의 간격 설정 (50dp 간격을 위해 위아래 각각 25dp 설정)
+          padding: const EdgeInsets.symmetric(vertical: 15.0),  // 아이템 간의 간격 설정 (50dp 간격을 위해 위아래 각각 25dp 설정)
           child: InkWell(
             onTap: () => {
               Navigator.push(
@@ -28,7 +28,7 @@ class _RecipeListStat extends State<RecipeList> {
               )
             },
             child: Container(
-              height: 150,  // 각 박스의 높이 설정
+              height: 100,  // 각 박스의 높이 설정
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(75),  // 알약 모양처럼 타원형 모서리 설정
