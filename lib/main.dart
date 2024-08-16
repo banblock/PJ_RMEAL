@@ -102,7 +102,12 @@ class MyHomePageState extends State<MyHomePage>{
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
-        title: Text('Text Input Example'),
+        title: Center(child:Image.asset(
+            'cookttake_top_logo.png',
+            width: 70,
+            height: 70,
+            fit: BoxFit.cover
+        )),
         actions: [
           IconButton(
             icon: Icon(Icons.exit_to_app),
