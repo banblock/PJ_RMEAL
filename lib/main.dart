@@ -12,7 +12,7 @@ import 'package:pj_rmeal/src/ui/body/MainBody.dart';
 import 'package:pj_rmeal/src/ui/component/RecipeProvider.dart';
 import 'package:provider/provider.dart';
 
-void main() async{
+void main() async {
   await Hive.initFlutter();
   WidgetsFlutterBinding.ensureInitialized();  // 1번코드
   await dotenv.load(fileName: ".env");
@@ -20,29 +20,39 @@ void main() async{
   print(box.values);
   if(!box.containsKey("ignoreIngredient")){
     print("suiiiiii");
-    box.put("ignoreIngredient",[]);
+    box.put("ignoreIngredient", []);
   }
   if(!box.containsKey("bookmark")){
     print("suiiiiii");
-    box.put("bookmark",[]);
+    box.put("bookmark", []);
   }
-  runApp(const MyApp());
+  final ProcessController process_controller = ProcessController();
+  final List<Map<String, dynamic>> recipes = await process_controller.csv_processer.loadCSV();
+  runApp(MyApp(process_controller: process_controller, recipes: recipes));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final ProcessController process_controller;
+  final List<Map<String, dynamic>> recipes;
+  const MyApp({Key? key, required this.process_controller, required this.recipes}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => RecipeProvider(),
       child: MaterialApp(
-        home: MyHomePage(),
-      )
+        home: MyHomePage(process_controller: process_controller, recipes: recipes),
+      ),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
+  final ProcessController process_controller;
+  final List<Map<String, dynamic>> recipes;
+  const MyHomePage({Key? key, required this.process_controller, required this.recipes}) : super(key: key);
+
+  @override
   MyHomePageState createState() => MyHomePageState();
 }
 
@@ -52,8 +62,7 @@ class MyHomePageState extends State<MyHomePage>{
   late final SerchBody serch_body;
   late final SettingBody setting_body;
   late final BookMarkBody bookmark_body;
-  late ProcessController process_controller;
-  late List<Map<String,dynamic>> bookmark_data;
+  //late ProcessController process_controller;
   late final String key;
   GeminiAI ai = GeminiAI();
   int _selectedIndex = 0;
@@ -61,21 +70,15 @@ class MyHomePageState extends State<MyHomePage>{
 
   void initState() {
     super.initState();
-    bookmark_data = [];
-    process_controller = ProcessController();
     key = dotenv.get("GEMINI_API_KEY");
     main_body = MainBody();
     serch_body = SerchBody(callSearchButton);
     setting_body = SettingBody();
-    bookmark_body = BookMarkBody();
+    bookmark_body = BookMarkBody(widget.recipes);
     user_box = Hive.box("userBox");
   }
 
   Widget _getSelectedPage(int index){
-    if(index == 1){
-      // Bookmark 탭으로 이동할 때마다 호출
-      callBookMarkRecipe();
-    }
     switch (index){
       case 0:
         return serch_body;
@@ -133,18 +136,9 @@ class MyHomePageState extends State<MyHomePage>{
   }
 
   Future<List<Map<String,dynamic>>> callSearchButton(String user_comment) async{
-    List<Map<String,dynamic>> titles_data = await process_controller.responeAIcommentforMap(user_comment, key);
+    List<Map<String,dynamic>> titles_data = await widget.process_controller.responeAIcommentforMap(user_comment, key);
     return titles_data;
   }
 
-  void callBookMarkRecipe() async{
-    List<int> ids = user_box.get("bookmark");
-    print(ids);
-    if(!ids.isEmpty){
-      bookmark_data = await process_controller.readRecipeDataforId(ids);
-      Provider.of<RecipeProvider>(context, listen: false)
-          .updateRecipes(bookmark_data);
-    }
-  }
 
 }

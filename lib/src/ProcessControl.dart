@@ -5,8 +5,6 @@ class ProcessController{
   GeminiAI ai_processer = GeminiAI();
   DataControl data_processer = DataControl();
   CsvControl csv_processer = CsvControl();
-
-
   Future<List<Map<String,dynamic>>> responeAIcommentforMap(String usercomment, String key) async{
     print('process in');
     List<Map<String, dynamic>> all_recipe = await csv_processer.loadCSV();
