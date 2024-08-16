@@ -63,7 +63,7 @@ class GeminiAI {
     String text = chatprompt!.inputPrompt();
     final content = [Content.text(text)];
     final response = await model.generateContent(content);
-    print(response.text);
+    print('output respone');
     setResponse(response.text);
   }
 
