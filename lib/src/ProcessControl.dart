@@ -1,13 +1,10 @@
 import 'package:pj_rmeal/src/ai/geminiAPI.dart';
 import 'package:pj_rmeal/src/dto/CsvControl.dart';
-import 'package:pj_rmeal/src/dto/dataControl.dart';
-import 'package:pj_rmeal/src/webCrawling/crawling.dart';
+import 'package:pj_rmeal/src/dto/data_control.dart';
 class ProcessController{
   GeminiAI ai_processer = GeminiAI();
   DataControl data_processer = DataControl();
   CsvControl csv_processer = CsvControl();
-
-
   Future<List<Map<String,dynamic>>> responeAIcommentforMap(String usercomment, String key) async{
     print('process in');
     List<Map<String, dynamic>> all_recipe = await csv_processer.loadCSV();
@@ -51,6 +48,10 @@ class ProcessController{
         .toList();
 
     return titles;
+  }
+
+  Future<List<Map<String,dynamic>>> readRecipeDataforId(List<int> ids) async {
+    return await csv_processer.filterDataByIds(ids);
   }
 
 }

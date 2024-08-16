@@ -5,63 +5,61 @@ import 'package:pj_rmeal/src/ui/component/SearchContainer.dart';
 import 'package:provider/provider.dart';
 
 import '../component/RecipeProvider.dart';
-
-class SearchBody extends StatefulWidget {
-  late final Future<List<Map<String, dynamic>>> Function(String) search_callback;
-
-  SearchBody(this.search_callback);
-
+class SerchBody extends StatefulWidget{
+  late final Future<List<Map<String,dynamic>>> Function(String) search_callback;
+  SerchBody(this.search_callback);
   @override
-  SearchState createState() => SearchState(this.search_callback);
+  SerchState createState() => SerchState(this.search_callback);
 }
 
-class SearchState extends State<SearchBody> {
-  late final Future<List<Map<String, dynamic>>> Function(String) search_callback;
+class SerchState extends State<SerchBody>{
+  late final Future<List<Map<String,dynamic>>> Function(String) search_callback;
   late final SearchContainer search_container;
   final recipelist = RecipeList();
   final TextEditingController controller = TextEditingController();
-  bool _visibility = false;
+  bool _visibility  = false;
 
-  SearchState(this.search_callback);
-
+  SerchState(this.search_callback);
+  // 생성자
   @override
   void initState() {
     super.initState();
+    // initState에서 search_container를 초기화
     search_container = SearchContainer(this.setRecommendRecipe);
   }
 
   @override
   Widget build(BuildContext context) {
+    // TODO: implement build
     return Center(
+      //padding: const EdgeInsets.all(8),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Visibility(
-              child: Expanded(
-                  child: Container(
-                    width: 1000,
-                    height: 750, // Adjusted to show approximately 5 items
-                    child: recipelist,
-                    padding: EdgeInsets.all(10), // Padding around the list
-                  )),
-              visible: _visibility),
+            child: Expanded(child:SizedBox(width: 1000, height: 1000,child:recipelist)),
+            visible:_visibility
+          ),
           search_container
         ],
+
       ),
+
     );
   }
 
-  void setRecommendRecipe(String text) async {
-    List<Map<String, dynamic>> title_data = await search_callback(text);
+  void setRecommendRecipe(String text) async{
+    List<Map<String,dynamic>> recipe_data = await search_callback(text);
+    print(recipe_data);
     Provider.of<RecipeProvider>(context, listen: false)
-        .updateRecipes(title_data);
-
-    if (_visibility == false) {
+        .updateRecipes(recipe_data);
+    if (_visibility == false){
       _visible();
     }
+    //recipelist.updateState(newRecipe);
   }
 
-  void _visible() {
+  void _visible(){
     setState(() {
       _visibility = true;
     });

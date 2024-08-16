@@ -1,5 +1,4 @@
 import 'package:google_generative_ai/google_generative_ai.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:pj_rmeal/src/ai/Prompt.dart';
 
 class GeminiAI {
@@ -64,7 +63,7 @@ class GeminiAI {
     String text = chatprompt!.inputPrompt();
     final content = [Content.text(text)];
     final response = await model.generateContent(content);
-    print(response.text);
+    print('output respone');
     setResponse(response.text);
   }
 
