@@ -84,6 +84,10 @@ class GeminiAI {
     chatprompt?.addRecipeData(data);
   }
 
+  void setIgnores(){
+    chatprompt?.addUserIgnores();
+  }
+
   //테스트용 코드
   // void addTestData(){
   //   chatprompt?.addRecipeData(testdata);//테스트용 코드

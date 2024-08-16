@@ -10,6 +10,7 @@ class ProcessController{
     List<Map<String, dynamic>> all_recipe = await csv_processer.loadCSV();
     ai_processer.setData(all_recipe);
     ai_processer.callChatMessage(usercomment);
+    ai_processer.setIgnores();
     await ai_processer.RecommendRecipeModel(key);
     String? response = ai_processer.responseChatMessage();
     List<Map<String, dynamic>> response_data = await csv_processer.filterDataByIds(parsingStringtoListint(response));
