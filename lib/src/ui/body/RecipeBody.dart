@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+//import 'package:flutter/material.dart';
+
 class RecipeBody extends StatefulWidget {
   final Map<String, dynamic> recipe;
 
@@ -34,6 +36,7 @@ class RecipeBodyState extends State<RecipeBody> {
       backgroundColor: Color(0xFFFCEEE4), // 배경색을 옅은 오렌지색으로 통일
       appBar: AppBar(
         backgroundColor: Color(0xFFE5741F), // 깊은 오렌지색 AppBar
+        iconTheme: IconThemeData(color: Colors.white),
         title: Text(
           widget.recipe["title"].replaceAll('_', ' '),
           style: TextStyle(
@@ -62,7 +65,6 @@ class RecipeBodyState extends State<RecipeBody> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 음식 소개를 위한 컨테이너
               SizedBox(height: 20),
               Container(
                 width: double.infinity,
@@ -77,7 +79,6 @@ class RecipeBodyState extends State<RecipeBody> {
                       spreadRadius: 1,
                       blurRadius: 1,
                       offset: Offset(4, 5),
-
                     ),
                   ],
                 ),
@@ -136,19 +137,10 @@ class RecipeBodyState extends State<RecipeBody> {
                       ),
                     ),
                     SizedBox(height: 10), // 제목과 내용 사이 간격
-                    Text(
-                      widget.recipe['ingredient']
-                          .replaceAll('[', '')
-                          .replaceAll(']', '')
-                          .replaceAll(' ,', ',')
-                          .replaceAll(',', ', ')
-                          .replaceAll('_', ' '),
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w700,
-                        fontFamily: 'NanumSquareNeo',
-                      ),
+                    Wrap(
+                      spacing: 8.0, // Chip 사이의 간격
+                      runSpacing: 4.0, // Chip 줄 간격
+                      children: _buildIngredientChips(),
                     ),
                   ],
                 ),
@@ -159,10 +151,8 @@ class RecipeBodyState extends State<RecipeBody> {
                 children: <Widget>[
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.3 -15 , // 슬라이더 높이 + 5dp
-                    //height: MediaQuery.of(context).size.height * 0.3 + 50
                     child: CarouselSlider.builder(
                       options: CarouselOptions(
-                        //height: MediaQuery.of(context).size.height * 0.5,
                         initialPage: 0,
                         viewportFraction: 1,
                         enlargeCenterPage: true,
@@ -186,6 +176,37 @@ class RecipeBodyState extends State<RecipeBody> {
         ),
       ),
     );
+  }
+
+  List<Widget> _buildIngredientChips() {
+    // 문자열을 파싱하여 재료 목록을 생성
+    var ingredients = widget.recipe['ingredient']
+        .replaceAll('[', '')
+        .replaceAll(']', '')
+        .replaceAll(' ,', ',')
+        .replaceAll(',', ', ')
+        .replaceAll('_', ' ')
+        .replaceAll("'", '') // ' 제거
+        .split(', ');
+
+    return ingredients.map<Widget>((ingredient) {
+      return Chip(
+        label: Text(
+          ingredient,
+          style: TextStyle(
+            fontFamily: 'NanumSquareNeo',
+            color: Colors.black,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        backgroundColor: Colors.orange.withOpacity(0.4),
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(25),
+        ),
+        side: BorderSide.none, // 테두리 제거
+      );
+    }).toList();
   }
 
   Widget recipeSlider(int index) => Container(
@@ -253,3 +274,4 @@ class RecipeBodyState extends State<RecipeBody> {
     });
   }
 }
+

@@ -43,9 +43,9 @@ class _RecipeListStat extends State<RecipeList> {
                     // ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey.withOpacity(0.5), // 그림자 색상
+                        color: Color(0xFFE5741F).withOpacity(0.3), // 그림자 색상
                         offset: Offset(2, 3), // 그림자의 위치 (x: 2, y: 3)
-                        blurRadius: 4, // 그림자의 흐림 정도
+                        blurRadius: 1, // 그림자의 흐림 정도
                         spreadRadius: 1, // 그림자의 퍼짐 정도
                       ),
                     ],

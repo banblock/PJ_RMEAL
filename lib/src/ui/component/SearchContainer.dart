@@ -15,6 +15,7 @@ class SearchContainer extends StatelessWidget{
           height: 60,
           margin: EdgeInsets.symmetric(horizontal: 15.0),
           decoration: BoxDecoration(
+            color: Colors.white, // 컨테이너 배경 색상 설정
             border: Border.all(
               color: Color(0xFFE5741F), // 테두리 색상
               width:5.0, // 테두리 두께

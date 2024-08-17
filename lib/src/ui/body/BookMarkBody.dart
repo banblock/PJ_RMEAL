@@ -31,14 +31,33 @@ class BookMarkState extends State<BookMarkBody> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
+            SizedBox(height: 10),
             GestureDetector(
               onTap: switchBookMarkRecipe,
-              child: Icon(
-                _bookmark_tag ? Icons.star : Icons.star_border,
-                color: Color(0xFFFFC000), // 항상 노란색으로 설정
-                size: 50.0,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white, // 원형 배경색
+                  shape: BoxShape.circle, // 원형 모양
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color(0xFFE5741F).withOpacity(0.3), // 그림자 색상
+                      offset: Offset(2, 4), // 그림자의 위치 (x: 4, y: 4)
+                      blurRadius: 0, // 그림자의 흐림 정도
+                      spreadRadius: 1, // 그림자의 퍼짐 정도
+                    ),
+                  ],
+                ),
+                padding: EdgeInsets.all(10), // 아이콘과 컨테이너 사이의 패딩
+                child: Center(
+                  child: Icon(
+                    _bookmark_tag ? Icons.star : Icons.star_border,
+                    color: Color(0xFFFFC000), // 아이콘 색상
+                    size: 50.0, // 아이콘 크기
+                  ),
+                ),
               ),
             ),
+            SizedBox(height: 10),
             Expanded(
               child: ListView.builder(
                 padding: const EdgeInsets.all(8),
@@ -61,7 +80,7 @@ class BookMarkState extends State<BookMarkBody> {
                             borderRadius: BorderRadius.circular(75), // 알약 모양을 위한 둥근 테두리
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.grey.withOpacity(0.5), // 그림자 색상
+                                color: Color(0xFFE5741F).withOpacity(0.3), // 그림자 색상
                                 offset: Offset(2, 3), // 그림자의 위치 (x: 4, y: 5)
                                 blurRadius: 1, // 그림자의 흐림 정도
                                 spreadRadius: 1, // 그림자의 퍼짐 정도

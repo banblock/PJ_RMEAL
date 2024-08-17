@@ -99,6 +99,7 @@ class MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFFCEEE4),
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight), // AppBar의 높이를 설정합니다.
         child: AppBar(
