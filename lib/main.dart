@@ -48,9 +48,9 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  final ProcessController process_controller;
-  final List<Map<String, dynamic>> recipes;
-  const MyHomePage({Key? key, required this.process_controller, required this.recipes}) : super(key: key);
+  final ProcessController _process_controller;
+  final List<Map<String, dynamic>> _recipes;
+  const MyHomePage({Key? key, required ProcessController process_controller, required List<Map<String, dynamic>> recipes}) : _recipes = recipes, _process_controller = process_controller, super(key: key);
 
   @override
   MyHomePageState createState() => MyHomePageState();
@@ -58,7 +58,6 @@ class MyHomePage extends StatefulWidget {
 
 class MyHomePageState extends State<MyHomePage>{
   late final Box user_box;
-  late final MainBody main_body;
   late final SerchBody serch_body;
   late final SettingBody setting_body;
   late final BookMarkBody bookmark_body;
@@ -71,10 +70,9 @@ class MyHomePageState extends State<MyHomePage>{
   void initState() {
     super.initState();
     key = dotenv.get("GEMINI_API_KEY");
-    main_body = MainBody();
     serch_body = SerchBody(callSearchButton);
     setting_body = SettingBody();
-    bookmark_body = BookMarkBody(widget.recipes);
+    bookmark_body = BookMarkBody(widget._recipes);
     user_box = Hive.box("userBox");
   }
 
@@ -141,7 +139,7 @@ class MyHomePageState extends State<MyHomePage>{
   }
 
   Future<List<Map<String,dynamic>>> callSearchButton(String user_comment) async{
-    List<Map<String,dynamic>> titles_data = await widget.process_controller.responeAIcommentforMap(user_comment, key);
+    List<Map<String,dynamic>> titles_data = await widget._process_controller.responeAIcommentforMap(user_comment, key);
     return titles_data;
   }
 
