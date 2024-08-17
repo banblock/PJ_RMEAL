@@ -72,7 +72,13 @@ flutter:
   assets:
     - .env
     - assets/all_recipes.csv
-
+  fonts:
+    - family: NanumSquareNeo
+      fonts:
+        - asset: assets/fonts/NanumSquareNeo-cBd.ttf
+          weight: 700
+        - asset: assets/fonts/NanumSquareNeo-eHv.ttf
+          weight: 800
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

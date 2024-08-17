@@ -12,13 +12,14 @@ class SearchContainer extends StatelessWidget{
     return Container(
           alignment: Alignment.center,
           width: 800,
-          height: 50,
+          height: 60,
+          margin: EdgeInsets.symmetric(horizontal: 15.0),
           decoration: BoxDecoration(
             border: Border.all(
-              color: Colors.deepOrange, // 테두리 색상
-              width: 2.0, // 테두리 두께
+              color: Color(0xFFE5741F), // 테두리 색상
+              width:5.0, // 테두리 두께
             ),
-            borderRadius: BorderRadius.all(Radius.circular(20)), // 테두리 둥글기
+            borderRadius: BorderRadius.all(Radius.circular(75)), // 테두리 둥글기
           ),
           child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,

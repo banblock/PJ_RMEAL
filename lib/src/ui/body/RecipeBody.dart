@@ -31,15 +31,15 @@ class RecipeBodyState extends State<RecipeBody> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.orange[50], // 배경색을 옅은 오렌지색으로 통일
+      backgroundColor: Color(0xFFFCEEE4), // 배경색을 옅은 오렌지색으로 통일
       appBar: AppBar(
-        backgroundColor: Colors.deepOrange, // 깊은 오렌지색 AppBar
+        backgroundColor: Color(0xFFE5741F), // 깊은 오렌지색 AppBar
         title: Text(
           widget.recipe["title"].replaceAll('_', ' '),
           style: TextStyle(
             color: Colors.white, // 타이틀 폰트 색상을 하얀색으로 설정
             fontSize: 24,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w800,
             fontFamily: 'NanumSquareNeo',
           ),
           overflow: TextOverflow.ellipsis,
@@ -49,7 +49,7 @@ class RecipeBodyState extends State<RecipeBody> {
             onTap: _toggleBookMark,
             child: Icon(
               _isbookmarked ? Icons.star : Icons.star_border,
-              color: Colors.yellow,
+              color: Color(0xFFFFC000), // 별 아이콘의 노란색
               size: 30.0,
             ),
           ),
@@ -63,19 +63,21 @@ class RecipeBodyState extends State<RecipeBody> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // 음식 소개를 위한 컨테이너
+              SizedBox(height: 20),
               Container(
                 width: double.infinity,
-                margin: EdgeInsets.only(bottom: 18),
-                padding: EdgeInsets.all(16),
+                margin: EdgeInsets.only(bottom: 28, left: 10, right: 10), // 마진을 10dp로 설정
+                padding: EdgeInsets.all(16), // 기본 패딩 유지
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 3),
+                      spreadRadius: 1,
+                      blurRadius: 1,
+                      offset: Offset(4, 5),
+
                     ),
                   ],
                 ),
@@ -86,8 +88,8 @@ class RecipeBodyState extends State<RecipeBody> {
                       "요리 개요",
                       style: TextStyle(
                         fontSize: 20,
-                        //fontWeight: FontWeight.bold,
-                        color: Colors.deepOrange,
+                        color: Color(0xFFE5741F), // 진한 오렌지색 텍스트
+                        fontWeight: FontWeight.w800,
                         fontFamily: 'NanumSquareNeo',
                       ),
                     ),
@@ -97,6 +99,7 @@ class RecipeBodyState extends State<RecipeBody> {
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.black,
+                        fontWeight: FontWeight.w700,
                         fontFamily: 'NanumSquareNeo',
                       ),
                     ),
@@ -106,6 +109,7 @@ class RecipeBodyState extends State<RecipeBody> {
               // 재료 목록을 위한 컨테이너
               Container(
                 width: double.infinity,
+                margin: EdgeInsets.only(left: 10, right: 10), // 마진을 10dp로 설정
                 padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -113,9 +117,9 @@ class RecipeBodyState extends State<RecipeBody> {
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 3),
+                      spreadRadius: 1,
+                      blurRadius: 1,
+                      offset: Offset(4, 5),
                     ),
                   ],
                 ),
@@ -126,8 +130,8 @@ class RecipeBodyState extends State<RecipeBody> {
                       "요리 재료",
                       style: TextStyle(
                         fontSize: 20,
-                        //fontWeight: FontWeight.bold,
-                        color: Colors.deepOrange,
+                        color: Color(0xFFE5741F), // 진한 오렌지색 텍스트
+                        fontWeight: FontWeight.w800,
                         fontFamily: 'NanumSquareNeo',
                       ),
                     ),
@@ -142,31 +146,37 @@ class RecipeBodyState extends State<RecipeBody> {
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.black,
+                        fontWeight: FontWeight.w700,
                         fontFamily: 'NanumSquareNeo',
                       ),
                     ),
                   ],
                 ),
               ),
-              SizedBox(height: 18),
+              SizedBox(height: 20), // 간격을 10dp 추가
               Stack(
                 alignment: Alignment.bottomCenter,
                 children: <Widget>[
-                  CarouselSlider.builder(
-                    options: CarouselOptions(
-                      initialPage: 0,
-                      viewportFraction: 1,
-                      enlargeCenterPage: true,
-                      onPageChanged: (index, reason) {
-                        setState(() {
-                          activeIndex = index;
-                        });
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.3 -15 , // 슬라이더 높이 + 5dp
+                    //height: MediaQuery.of(context).size.height * 0.3 + 50
+                    child: CarouselSlider.builder(
+                      options: CarouselOptions(
+                        //height: MediaQuery.of(context).size.height * 0.5,
+                        initialPage: 0,
+                        viewportFraction: 1,
+                        enlargeCenterPage: true,
+                        onPageChanged: (index, reason) {
+                          setState(() {
+                            activeIndex = index;
+                          });
+                        },
+                      ),
+                      itemCount: recipe_instruction.length,
+                      itemBuilder: (context, index, realIndex) {
+                        return recipeSlider(index);
                       },
                     ),
-                    itemCount: recipe_instruction.length,
-                    itemBuilder: (context, index, realIndex) {
-                      return recipeSlider(index);
-                    },
                   ),
                   indicator(),
                 ],
@@ -188,9 +198,9 @@ class RecipeBodyState extends State<RecipeBody> {
       boxShadow: [
         BoxShadow(
           color: Colors.grey.withOpacity(0.5),
-          spreadRadius: 5,
-          blurRadius: 7,
-          offset: Offset(0, 3), // 그림자 위치 조정
+          spreadRadius: 1,
+          blurRadius: 1,
+          offset: Offset(4, 5), // 그림자 위치 조정
         ),
       ],
     ),
@@ -199,6 +209,7 @@ class RecipeBodyState extends State<RecipeBody> {
       style: TextStyle(
         fontSize: 18,
         color: Colors.black,
+        fontWeight: FontWeight.w700,
         fontFamily: 'NanumSquareNeo',
         decoration: TextDecoration.none, // 밑줄 제거
         backgroundColor: Colors.transparent, // 하이라이트 제거
@@ -214,8 +225,8 @@ class RecipeBodyState extends State<RecipeBody> {
       effect: JumpingDotEffect(
         dotHeight: 6,
         dotWidth: 6,
-        activeDotColor: Colors.deepOrange,
-        dotColor: Colors.orange.withOpacity(0.6),
+        activeDotColor: Color(0xFFE5741F),
+        dotColor: Color(0xFFFFC000).withOpacity(0.6),
       ),
     ),
   );

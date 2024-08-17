@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'RecipeBody.dart';
@@ -26,55 +25,70 @@ class BookMarkState extends State<BookMarkBody> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          GestureDetector(
-            onTap: switchBookMarkRecipe,
-            child: Icon(
-              _bookmark_tag ? Icons.star : Icons.star_border,
-              color: _bookmark_tag ? Colors.yellow : Colors.grey,
-              size: 50.0,
+    return Scaffold(
+      backgroundColor: Color(0xFFFCEEE4), // 배경 색상 설정
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            GestureDetector(
+              onTap: switchBookMarkRecipe,
+              child: Icon(
+                _bookmark_tag ? Icons.star : Icons.star_border,
+                color: Color(0xFFFFC000), // 항상 노란색으로 설정
+                size: 50.0,
+              ),
             ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.all(8),
-              itemCount: out_recipes.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 7.5), // 15dp 간격을 위한 수직 패딩
-                  child: InkWell(
-                    onTap: () => {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => RecipeBody(out_recipes[index])),
-                      )
-                    },
-                    child: Container(
-                      height: 100, // 각 항목의 높이 설정
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(75), // 알약 모양을 위한 둥근 테두리
-                        border: Border.all(
-                          color: Colors.deepOrange, // 테두리 색상
-                          width: 2.0, // 테두리 두께
+            Expanded(
+              child: ListView.builder(
+                padding: const EdgeInsets.all(8),
+                itemCount: out_recipes.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Column(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => RecipeBody(out_recipes[index])),
+                          );
+                        },
+                        child: Container(
+                          height: 80, // 각 항목의 높이 설정
+                          margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5), // 컨테이너 양쪽에 5pt 마진 추가
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(75), // 알약 모양을 위한 둥근 테두리
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5), // 그림자 색상
+                                offset: Offset(2, 3), // 그림자의 위치 (x: 4, y: 5)
+                                blurRadius: 1, // 그림자의 흐림 정도
+                                spreadRadius: 1, // 그림자의 퍼짐 정도
+                              ),
+                            ],
+                          ),
+                          child: Center(
+                            child: Text(
+                              out_recipes[index]["title"], // 레시피 제목 표시
+                              style: TextStyle(
+                                fontSize: 22, // 글씨 크기 20에서 2pt 증가
+                                fontWeight: FontWeight.w800,
+                                fontFamily: 'NanumSquareNeo', // 글씨체 설정
+                                color: Color(0xFFE5741F), // 글씨 색상 설정
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                      child: Center(
-                        child: Text(
-                          out_recipes[index]["title"], // 레시피 제목 표시
-                          style: TextStyle(fontSize: 20), // 텍스트 크기 설정
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              },
+                      SizedBox(height: 15), // 컨테이너 간의 간격을 15pt로 설정
+                    ],
+                  );
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
