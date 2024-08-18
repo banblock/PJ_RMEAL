@@ -58,7 +58,6 @@ class MyHomePage extends StatefulWidget {
 
 class MyHomePageState extends State<MyHomePage> {
   late final Box user_box;
-  late final MainBody main_body;
   late final SearchBody search_body;
   late final SettingBody setting_body;
   late final BookMarkBody bookmark_body;
@@ -70,7 +69,6 @@ class MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     key = dotenv.get("GEMINI_API_KEY");
-    main_body = MainBody();
     search_body = SearchBody(callSearchButton);
     setting_body = SettingBody();
     bookmark_body = BookMarkBody(widget.recipes);
