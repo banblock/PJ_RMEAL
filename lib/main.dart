@@ -7,7 +7,6 @@ import 'package:pj_rmeal/src/ai/geminiAPI.dart';
 import 'package:pj_rmeal/src/ui/body/BookMarkBody.dart';
 import 'package:pj_rmeal/src/ui/body/SearchBody.dart';
 import 'package:pj_rmeal/src/ui/body/SettingBody.dart';
-import 'package:pj_rmeal/src/ui/body/MainBody.dart';
 import 'package:pj_rmeal/src/ui/component/RecipeProvider.dart';
 import 'package:provider/provider.dart';
 
